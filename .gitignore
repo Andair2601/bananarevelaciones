@@ -1,0 +1,13 @@
+node_modules/
+cdk.out/
+*.log
+
+# Contiene el ID de la cuenta de AWS y de la zona de Route 53; CDK lo regenera solo
+cdk.context.json
+
+# Credenciales y configuración local
+.env
+.env.*
+.aws/
+*.pem
+.claude/

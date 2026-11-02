@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Banana Deco Party Revelaciones</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Revelaciones de género en Trujillo con humo de color, lluvia de confeti y muros de humo. Chispas de llama fría y operador en cada revelación.">
+<meta name="theme-color" content="#24183D">
+<meta property="og:type" content="website">
+<meta property="og:title" content="¿Niña o niño? Revelaciones de género en Trujillo">
+<meta property="og:description" content="Humo de color, lluvia de confeti y muros de humo. Mira los paquetes y reserva tu fecha por WhatsApp.">
+<meta property="og:image" content="__SITE_URL__/assets/og.jpg">
+<meta property="og:url" content="__SITE_URL__/">
+<meta property="og:locale" content="es_PE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Figtree:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap">
+<style>
+/* Layout: una sola columna que pasa del día (paquetes esenciales) al atardecer (muros de humo), como una revelación al aire libre. Mundo visual único, sin variante oscura. */
+:root{
+  --algodon:#FFF5F7;      /* fondo papel */
+  --algodon-2:#FCE8EF;
+  --tinta:#3A2A47;        /* texto */
+  --tinta-suave:#5E4F6B;
+  --rosa:#E85D8E;
+  --rosa-hondo:#B8326A;
+  --celeste:#4FA3E3;
+  --celeste-hondo:#1E5F9E;
+  --noche:#24183D;
+  --malva:#5E3A73;
+  --oro:#F2C46D;
+  --oro-hondo:#8A6620;
+  --blanco:#FFFFFF;
+  --verde-wa:#1F8B4C;
+  --f-display:"Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-script:"Dancing Script", "Brush Script MT", cursive;
+  --ancho:1080px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--algodon);color:var(--tinta);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--f-display);line-height:1.05;margin:0;text-wrap:balance;font-weight:800}
+p{margin:0}
+a{color:var(--rosa-hondo)}
+:focus-visible{outline:3px solid var(--celeste);outline-offset:3px;border-radius:6px}
+
+.wrap{max-width:var(--ancho);margin:0 auto;padding-left:max(18px, env(safe-area-inset-left, 0px));padding-right:max(18px, env(safe-area-inset-right, 0px))}
+
+/* Lienzo de efectos */
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font-family:var(--f-display);font-weight:700;font-size:19px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease}
+.btn:active{transform:scale(.97)}
+.btn svg{flex-shrink:0}
+.btn-wa{background:var(--verde-wa);color:var(--blanco)}
+.btn-wa:hover{background:#18713D}
+.btn-claro{background:rgba(255,255,255,.14);color:var(--blanco);box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
+.btn-claro:hover{background:rgba(255,255,255,.24)}
+.btn-replay{min-height:44px;padding:0 16px;font-size:16px;background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 2px currentColor}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:var(--blanco);background:
+  radial-gradient(120% 70% at 50% 110%, #F39AB6 0%, rgba(243,154,182,0) 60%),
+  linear-gradient(180deg, var(--noche) 0%, var(--malva) 58%, #A55C8E 100%);
+  padding-block:28px 64px}
+.hero .wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px}
+.hero-top{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{width:68px;height:68px;border-radius:50%;background:var(--blanco);box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.hero-top .lugar{font-size:15px;font-weight:600;color:rgba(255,255,255,.85)}
+.conteo{margin-top:18px;width:132px;height:132px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle, rgba(255,255,255,.16), rgba(255,255,255,.04));box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.conteo span{font-family:var(--f-display);font-weight:800;font-size:76px;line-height:1;font-variant-numeric:tabular-nums}
+.conteo.pop span{animation:pop .9s ease}
+@keyframes pop{0%{transform:scale(.4);opacity:0}30%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+.hero h1{font-size:clamp(54px, 13vw, 112px);letter-spacing:-.5px}
+.hero h1 .n{color:#FFB3CB}
+.hero h1 .o{color:#9FD2F7}
+.hero .script{font-family:var(--f-script);font-size:clamp(30px,7vw,46px);color:rgba(255,255,255,.92);margin-top:-6px}
+.hero .lead{max-width:34ch;font-size:19px;color:rgba(255,255,255,.92)}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.sellos{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;font-size:15px;color:rgba(255,255,255,.9)}
+.sellos span{display:inline-flex;align-items:center;gap:8px}
+
+/* Elegir espacio */
+.elige{padding-block:44px 8px}
+.elige h2{font-size:clamp(30px,6vw,40px);text-align:center;color:var(--tinta)}
+.elige p.sub{text-align:center;color:var(--tinta-suave);margin-top:6px}
+.elige-grid{margin-top:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.opcion{display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:22px;text-decoration:none;color:var(--tinta);background:var(--blanco);box-shadow:0 2px 0 rgba(58,42,71,.06), 0 10px 30px rgba(184,50,106,.08)}
+.opcion:hover{box-shadow:0 2px 0 rgba(58,42,71,.06), 0 14px 36px rgba(184,50,106,.16)}
+.opcion strong{font-family:var(--f-display);font-size:24px;line-height:1.1}
+.opcion small{font-size:15px;color:var(--tinta-suave)}
+.opcion .ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center}
+.opcion.salon .ico{background:#E5F0FB;color:var(--celeste-hondo)}
+.opcion.aire .ico{background:#FCE3EC;color:var(--rosa-hondo)}
+
+/* Paquetes esenciales */
+.seccion-titulo{display:flex;flex-direction:column;gap:6px;max-width:40ch}
+.seccion-titulo h2{font-size:clamp(34px,7vw,52px)}
+.seccion-titulo p{color:var(--tinta-suave);font-size:18px}
+.esenciales{padding-block:56px 40px}
+.paquete{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:34px;align-items:center;margin-top:44px}
+.paquete.inv{grid-template-columns:minmax(0,6fr) minmax(0,5fr)}
+.paquete.inv .media{order:2}
+.media{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:3/4;max-width:100%;background:var(--algodon-2);box-shadow:0 18px 50px rgba(58,42,71,.18)}
+.media img,.media video{width:100%;height:100%;object-fit:cover}
+.media .ref{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--blanco);background:rgba(36,24,61,.55);padding:3px 9px;border-radius:999px}
+.info{display:flex;flex-direction:column;gap:14px;min-width:0}
+.tag{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;padding:5px 12px;border-radius:999px}
+.tag.aire{background:#E3F2E7;color:#2C6A3D}
+.tag.salon{background:#E5F0FB;color:var(--celeste-hondo)}
+.tag.oro{background:rgba(242,196,109,.18);color:var(--oro)}
+.nombre{font-size:clamp(40px,8vw,58px);color:var(--celeste-hondo)}
+.relato{font-size:18px;max-width:46ch}
+.incluye{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.incluye li{display:flex;gap:10px;align-items:flex-start}
+.incluye li::before{content:"";flex-shrink:0;width:9px;height:9px;margin-top:9px;border-radius:50%;background:var(--rosa)}
+.precio-fila{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:6px}
+.precio{font-family:var(--f-display);font-weight:800;font-size:46px;line-height:1;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.precio small{font-size:20px;font-weight:700;margin-right:2px}
+.badge{position:absolute;top:14px;right:14px;background:var(--rosa);color:var(--blanco);font-family:var(--f-display);font-weight:700;font-size:16px;padding:6px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(184,50,106,.35)}
+
+/* MURO DE HUMO: atardecer */
+.muro{color:var(--blanco);background:linear-gradient(180deg, var(--algodon) 0px, #D9A3C0 50px, #8E5689 120px, var(--malva) 200px, var(--noche) 640px, var(--noche) 100%);padding-block:150px 70px}
+.muro .seccion-titulo p{color:rgba(255,255,255,.86)}
+.muro-intro{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:34px;align-items:center;margin-top:30px}
+.muro-intro .texto{display:flex;flex-direction:column;gap:14px;min-width:0}
+.muro-intro .texto p{font-size:18px;color:rgba(255,255,255,.9);max-width:44ch}
+.niveles{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px}
+.niveles li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:16px}
+.niveles .barra{grid-column:1/-1;height:9px;border-radius:9px;background:rgba(255,255,255,.14);overflow:hidden}
+.niveles .barra i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--celeste),var(--rosa))}
+.niveles li:last-child .barra i{background:linear-gradient(90deg,var(--rosa),var(--oro))}
+.niveles b{font-weight:600}
+.niveles span{color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
+
+.nivel{margin-top:56px;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:34px;align-items:center;padding:30px;border-radius:30px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.nivel .nombre{color:var(--blanco)}
+.nivel .relato{color:rgba(255,255,255,.9)}
+.nivel .incluye li::before{background:#FFB3CB}
+.nivel .precio{color:#FFB3CB}
+.nivel .btn-replay{color:var(--blanco)}
+.nivel.supremo{background:linear-gradient(160deg, rgba(242,196,109,.16), rgba(242,196,109,.04));box-shadow:inset 0 0 0 2px rgba(242,196,109,.55)}
+.nivel.supremo .nombre{color:var(--oro)}
+.nivel.supremo .precio{color:var(--oro)}
+.nivel.supremo .incluye li::before{background:var(--oro)}
+.edicion{font-family:var(--f-display);font-weight:700;font-size:16px;color:var(--noche);background:var(--oro);padding:4px 14px;border-radius:999px;align-self:flex-start}
+
+/* Tortas: 4 puntos de disparo, cada uno una cuadrícula de disparos */
+.tortas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px;border-radius:22px;background:rgba(0,0,0,.18)}
+.torta{display:grid;gap:4px;aspect-ratio:1;max-width:100%}
+.torta i{border-radius:50%;background:rgba(255,255,255,.22);transition:background .25s ease, box-shadow .25s ease}
+.torta i.on{background:#FFB3CB;box-shadow:0 0 8px #FF8FB4}
+.torta i.on.c{background:#9FD2F7;box-shadow:0 0 8px #6FBAF2}
+.supremo .torta i.on{background:var(--oro);box-shadow:0 0 8px var(--oro)}
+.tortas-pie{grid-column:1/-1;text-align:center;font-size:14px;color:rgba(255,255,255,.75);font-variant-numeric:tabular-nums}
+
+/* Complementos */
+.extras{padding-block:64px 30px}
+.extras-lista{margin-top:24px;display:grid;gap:12px;max-width:720px}
+.extra{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:18px 20px;border-radius:20px;background:var(--blanco);box-shadow:0 8px 26px rgba(184,50,106,.07)}
+.extra div{min-width:0}
+.extra strong{display:block;font-family:var(--f-display);font-size:22px;line-height:1.15}
+.extra small{font-size:15px;color:var(--tinta-suave)}
+.extra .p{font-family:var(--f-display);font-weight:800;font-size:28px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:14px;background:var(--algodon-2);min-width:88px}
+.chip span{font-size:14px;color:var(--tinta-suave)}
+.chip b{font-family:var(--f-display);font-size:22px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.nota{margin-top:12px;font-size:15px;color:var(--tinta-suave)}
+
+/* Cómo se vive */
+.pasos{padding-block:50px}
+.pasos ol{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;counter-reset:p}
+.pasos li{counter-increment:p;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pasos li::before{content:counter(p);font-family:var(--f-display);font-weight:800;font-size:22px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:var(--blanco);background:var(--rosa)}
+.pasos li:nth-child(even)::before{background:var(--celeste-hondo)}
+.pasos strong{font-family:var(--f-display);font-size:21px;line-height:1.15}
+.pasos p{font-size:16px;color:var(--tinta-suave)}
+
+/* Recomendaciones */
+.consejos{padding-block:20px 60px}
+.consejos-grid{margin-top:24px;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px}
+.recos{display:grid;gap:16px;padding:24px;border-radius:24px;background:var(--blanco)}
+.reco{display:flex;gap:14px;align-items:flex-start}
+.reco svg{flex-shrink:0;margin-top:2px;color:var(--rosa-hondo)}
+.reco:nth-child(even) svg{color:var(--celeste-hondo)}
+.reco p{font-size:16px}
+.condiciones{padding:24px;border-radius:24px;background:var(--algodon-2)}
+.condiciones h3{font-size:24px}
+.condiciones ul{margin:12px 0 0;padding-left:20px;display:grid;gap:8px;font-size:16px}
+
+/* Cierre */
+.cierre{color:var(--blanco);background:linear-gradient(180deg, var(--malva), var(--noche));padding-block:60px 120px;text-align:center}
+.cierre .wrap{display:flex;flex-direction:column;align-items:center;gap:18px}
+.cierre h2{font-size:clamp(38px,8vw,60px)}
+.cierre p{font-size:18px;color:rgba(255,255,255,.88);max-width:38ch}
+.numero{font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:.5px;user-select:all}
+.redes{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.redes a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;color:var(--blanco);text-decoration:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
+.redes a:hover{background:rgba(255,255,255,.12)}
+.pie{font-size:14px;color:rgba(255,255,255,.65)}
+
+/* WhatsApp flotante */
+.wa-flot{position:fixed;z-index:70;right:calc(16px + env(safe-area-inset-right, 0px));bottom:calc(16px + env(safe-area-inset-bottom, 0px));width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--verde-wa);color:var(--blanco);box-shadow:0 8px 24px rgba(0,0,0,.28);text-decoration:none}
+
+/* Responsive */
+@media (max-width: 820px){
+  .paquete,.paquete.inv,.muro-intro,.nivel{grid-template-columns:minmax(0,1fr);gap:22px}
+  .paquete.inv .media{order:0}
+  /* Etiqueta y nombre del paquete arriba del video */
+  .paquete,.paquete.inv{gap:14px}
+  .paquete .info{display:contents}
+  .paquete .tag{order:-1;justify-self:start}
+  .paquete .nombre{order:-1}
+  .paquete .media{margin-block:8px}
+  .media{aspect-ratio:4/5}
+  .nivel{padding:20px}
+  .pasos ol{grid-template-columns:minmax(0,1fr);gap:18px}
+  .pasos li{flex-direction:row;align-items:flex-start;gap:14px}
+  .pasos li > div{display:flex;flex-direction:column;gap:2px}
+  .consejos-grid{grid-template-columns:minmax(0,1fr)}
+  .muro{padding-block:110px 60px}
+}
+@media (max-width: 420px){
+  .elige-grid{grid-template-columns:minmax(0,1fr)}
+  .tortas{gap:8px;padding:14px}
+  .torta{gap:3px}
+  .precio{font-size:40px}
+}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="hero" id="inicio" data-fx="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <img class="logo" src="assets/logo.png" alt="Banana Deco Party" width="68" height="68">
+      <span class="lugar">Revelaciones en Trujillo</span>
+    </div>
+    <div class="conteo" aria-hidden="true"><span id="conteo">0</span></div>
+    <h1><span class="n">¿Niña</span> o <span class="o">niño?</span></h1>
+    <p class="script">girl or boy</p>
+    <p class="lead">Humo de color, lluvia de confeti y muros de humo para el momento en que todos lo descubren.</p>
+    <div class="ctas">
+      <a class="btn btn-claro" href="#paquetes">Ver paquetes</a>
+      <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="" target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.3-.8-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
+        Escribir por WhatsApp
+      </a>
+    </div>
+    <div class="sellos">
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg>Chispas de llama fría</span>
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21v-1a7 7 0 0 1 16 0v1"/></svg>Operador en cada revelación</span>
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Guardamos el secreto</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="elige" id="paquetes" aria-labelledby="t-elige">
+  <div class="wrap">
+    <h2 id="t-elige">¿Dónde será tu revelación?</h2>
+    <p class="sub">Empieza por el lugar y te mostramos lo que mejor luce ahí.</p>
+    <div class="elige-grid">
+      <a class="opcion salon" href="#confeti">
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></span>
+        <strong>En un salón</strong>
+        <small>Lluvia de Confeti</small>
+      </a>
+      <a class="opcion aire" href="#humo">
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg></span>
+        <strong>Al aire libre</strong>
+        <small>Humo de Color y muros de humo</small>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="esenciales" aria-labelledby="t-esenciales">
+  <div class="wrap">
+    <div class="seccion-titulo">
+      <h2 id="t-esenciales">Revelaciones esenciales</h2>
+      <p>Sencillas, rápidas de montar y con todo el efecto en el momento justo.</p>
+    </div>
+
+    <article class="paquete" id="humo" data-fx="humo" data-pkg="Humo de Color" data-price="199">
+      <div class="media">
+        <video poster="assets/humo-color.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación con humo celeste y chisperos de llama fría">
+          <source src="assets/humo-color-720.mp4" type="video/mp4" media="(max-width: 600px)">
+          <source src="assets/humo-color.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="info">
+        <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
+        <h3 class="nombre">Humo de Color</h3>
+        <p class="relato">Empieza la cuenta regresiva y dos chisperos de llama fría se encienden a su lado. En el cero, una nube rosa o celeste sube al cielo. Treinta segundos de gritos y abrazos que van a querer ver una y otra vez.</p>
+        <ul class="incluye">
+          <li>2 humos del color del bebé</li>
+          <li>2 chisperos de llama fría</li>
+          <li>Detonador para que los papás activen la revelación</li>
+          <li>Operador que dirige la cuenta regresiva</li>
+        </ul>
+        <div class="precio-fila">
+          <p class="precio"><small>S/</small>199</p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Humo de Color" data-price="199" target="_blank" rel="noopener">Reservar Humo de Color</a>
+          <button class="btn btn-replay" type="button" data-replay="humo">Ver efecto</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="paquete inv" id="confeti" data-fx="confeti" data-pkg="Lluvia de Confeti" data-price="349">
+      <div class="media">
+        <video poster="assets/confeti.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación con lluvia de confeti rosa en un salón">
+          <source src="assets/confeti-720.mp4" type="video/mp4" media="(max-width: 600px)">
+          <source src="assets/confeti.mp4" type="video/mp4">
+        </video>
+        <span class="badge">El más elegido</span>
+      </div>
+      <div class="info">
+        <span class="tag salon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Interiores</span>
+        <h3 class="nombre">Lluvia de Confeti</h3>
+        <p class="relato">Sus invitados cuentan en voz alta y, al primer número, las chispas se encienden. En el cero, una lluvia de confeti del color de su bebé cae sobre ustedes. Es la foto que estará en su álbum para siempre.</p>
+        <ul class="incluye">
+          <li>Cañón profesional de confeti</li>
+          <li>2 chisperos de llama fría</li>
+          <li>Detonador para los papás</li>
+          <li>Operador y equipo de montaje</li>
+        </ul>
+        <div class="precio-fila">
+          <p class="precio"><small>S/</small>349</p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Lluvia de Confeti" data-price="349" target="_blank" rel="noopener">Reservar Lluvia de Confeti</a>
+          <button class="btn btn-replay" type="button" data-replay="confeti">Ver efecto</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="muro" id="muro" aria-labelledby="t-muro">
+  <div class="wrap">
+    <div class="seccion-titulo">
+      <h2 id="t-muro">Muros de humo</h2>
+      <p>Para revelaciones al aire libre que se ven desde lejos. Cuatro puntos de disparo sincronizados pintan el cielo de rosa o celeste.</p>
+    </div>
+
+    <div class="muro-intro">
+      <div class="media">
+        <video poster="assets/humo.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación al aire libre con humo celeste y chisperos">
+          <source src="assets/humo-720.mp4" type="video/mp4" media="(max-width: 600px)">
+          <source src="assets/humo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="texto">
+        <span class="tag oro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Diseñados para cielo abierto</span>
+        <p>Tú eliges cuánto color quieres en el cielo. Mientras más disparos, más denso y más largo es el muro.</p>
+        <ul class="niveles">
+          <li><b>Cortina de Color</b><span>64 disparos</span><div class="barra"><i style="width:44%"></i></div></li>
+          <li><b>Muro Intenso</b><span>100 disparos</span><div class="barra"><i style="width:69%"></i></div></li>
+          <li><b>Muro Supremo</b><span>144 disparos</span><div class="barra"><i style="width:100%"></i></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <article class="nivel" id="cortina" data-fx="muro" data-nivel="1" data-pkg="Cortina de Color" data-price="649">
+      <div class="info">
+        <h3 class="nombre">Cortina de Color</h3>
+        <p class="relato">Comienza la cuenta regresiva y se encienden los chisperos. En el cero, cuatro puntos de humo disparan a la vez y levantan una cortina de color frente a todos sus invitados.</p>
+        <ul class="incluye">
+          <li>Muro de humo de 64 disparos sincronizados</li>
+          <li>2 chisperos de llama fría</li>
+          <li>Detonador para los papás</li>
+          <li>Operador y equipo de montaje</li>
+        </ul>
+        <div class="precio-fila">
+          <p class="precio"><small>S/</small>649</p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Cortina de Color" data-price="649" target="_blank" rel="noopener">Reservar Cortina</a>
+          <button class="btn btn-replay" type="button" data-replay="cortina">Ver efecto</button>
+        </div>
+      </div>
+      <div class="tortas" data-lado="4" aria-label="4 puntos de disparo de 16 disparos cada uno"></div>
+    </article>
+
+    <article class="nivel" id="intenso" data-fx="muro" data-nivel="2" data-pkg="Muro Intenso" data-price="849">
+      <div class="info">
+        <h3 class="nombre">Muro Intenso</h3>
+        <p class="relato">Más disparos, humo más denso. En el cero, el color cubre el cielo detrás de ustedes y se queda en el aire mientras todos celebran.</p>
+        <ul class="incluye">
+          <li>Muro de humo denso de 100 disparos</li>
+          <li>2 chisperos de llama fría</li>
+          <li>Detonador para los papás</li>
+          <li>Operador y equipo de montaje</li>
+        </ul>
+        <div class="precio-fila">
+          <p class="precio"><small>S/</small>849</p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Muro Intenso" data-price="849" target="_blank" rel="noopener">Reservar Muro Intenso</a>
+          <button class="btn btn-replay" type="button" data-replay="intenso">Ver efecto</button>
+        </div>
+      </div>
+      <div class="tortas" data-lado="5" aria-label="4 puntos de disparo de 25 disparos cada uno"></div>
+    </article>
+
+    <article class="nivel supremo" id="supremo" data-fx="muro" data-nivel="3" data-pkg="Muro Supremo" data-price="999">
+      <div class="info">
+        <span class="edicion">Edición especial</span>
+        <h3 class="nombre">Muro Supremo</h3>
+        <p class="relato">La revelación más grande que hacemos. Un muro de color tan alto y denso que tus invitados dejan de grabar solo para mirarlo. Para quienes quieren que todos lo recuerden.</p>
+        <ul class="incluye">
+          <li>Muro de humo de máxima densidad, 144 disparos</li>
+          <li>2 chisperos de llama fría</li>
+          <li>Detonador para los papás</li>
+          <li>Operador y equipo de montaje</li>
+        </ul>
+        <div class="precio-fila">
+          <p class="precio"><small>S/</small>999</p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Muro Supremo" data-price="999" target="_blank" rel="noopener">Reservar Muro Supremo</a>
+          <button class="btn btn-replay" type="button" data-replay="supremo">Ver efecto</button>
+        </div>
+      </div>
+      <div class="tortas" data-lado="6" aria-label="4 puntos de disparo de 36 disparos cada uno"></div>
+    </article>
+  </div>
+</section>
+
+<section class="extras" aria-labelledby="t-extras">
+  <div class="wrap">
+    <div class="seccion-titulo">
+      <h2 id="t-extras">Hazlo aún más especial</h2>
+      <p>Complementos para sumar a cualquiera de nuestros paquetes.</p>
+    </div>
+    <div class="extras-lista">
+      <div class="extra">
+        <div><strong>Par de humos de color</strong><small>Solo aire libre</small></div>
+        <span class="p">S/ 49</span>
+      </div>
+      <div class="extra">
+        <div><strong>Marco de chispas frías</strong><small>2 chispas para la entrada o la mesa</small></div>
+        <span class="p">S/ 69</span>
+      </div>
+      <div class="extra">
+        <div><strong>Torta de humo extra</strong><small>Más color en el cielo, aire libre</small></div>
+        <div class="chips">
+          <div class="chip"><span>16 disparos</span><b>S/ 99</b></div>
+          <div class="chip"><span>25 disparos</span><b>S/ 149</b></div>
+          <div class="chip"><span>36 disparos</span><b>S/ 199</b></div>
+        </div>
+      </div>
+    </div>
+    <p class="nota">Disponibles solo como complemento de un paquete.</p>
+  </div>
+</section>
+
+<section class="pasos" aria-labelledby="t-pasos">
+  <div class="wrap">
+    <div class="seccion-titulo">
+      <h2 id="t-pasos">Así se vive tu revelación</h2>
+    </div>
+    <ol>
+      <li><div><strong>El secreto</strong><p>Tu doctor o alguien de confianza nos envía el resultado. Nadie más lo sabrá.</p></div></li>
+      <li><div><strong>El montaje</strong><p>Instalamos todo con anticipación y lo dejamos listo.</p></div></li>
+      <li><div><strong>La cuenta regresiva</strong><p>Guiamos a tus invitados y, al primer número, se encienden los chisperos.</p></div></li>
+      <li><div><strong>¡Cero!</strong><p>Presionan juntos el detonador: unos 30 segundos de color y emoción.</p></div></li>
+      <li><div><strong>Las fotos</strong><p>Se toman sus fotos con el detonador y retiramos nuestros equipos.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="consejos" aria-labelledby="t-consejos">
+  <div class="wrap">
+    <div class="seccion-titulo">
+      <h2 id="t-consejos">Antes de tu revelación</h2>
+    </div>
+    <div class="consejos-grid">
+      <div class="recos">
+        <div class="reco"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 18a5 5 0 0 0-10 0"/><path d="M12 2v7"/><path d="M4.2 10.2l1.4 1.4"/><path d="M1 18h2"/><path d="M21 18h2"/><path d="M18.4 11.6l1.4-1.4"/><path d="M23 22H1"/></svg><p><strong>Elige el atardecer.</strong> El color aún se ve con luz natural, las chispas destacan más y las fotos salen espectaculares.</p></div>
+        <div class="reco"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><p><strong>Avísanos si hay toma de corriente</strong> cerca del lugar: con ella usamos nuestros chisperos de llama fría de hasta 4 metros.*</p></div>
+        <div class="reco"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v12H3z"/><circle cx="12" cy="13" r="4"/></svg><p><strong>Ubica a tu fotógrafo de frente</strong>, a unos metros de ustedes, para captar el momento completo.</p></div>
+        <div class="reco"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><p><strong>¿Es en un salón?</strong> Consulta con el local si permite confeti.</p></div>
+        <div class="reco"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><p><strong>Todas nuestras chispas son de llama fría:</strong> no queman y son seguras cerca de niños e invitados.</p></div>
+      </div>
+      <div class="condiciones">
+        <h3>Condiciones</h3>
+        <ul>
+          <li>La movilidad se cotiza según la zona del evento.</li>
+          <li>Incluye montaje, revelación y fotos con el detonador; luego retiramos nuestros equipos.</li>
+          <li>La limpieza del confeti queda a cargo del cliente o del local.</li>
+          <li>*La altura de los chisperos depende de la disponibilidad de punto de luz.</li>
+          <li>Imágenes y videos de revelaciones reales; el resultado varía según el lugar y el clima.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="cierre" id="reservar" data-fx="cierre">
+  <div class="wrap">
+    <img class="logo" src="assets/logo.png" alt="" width="68" height="68">
+    <h2>Reserva tu fecha</h2>
+    <p>Cuéntanos el día, el lugar y el paquete que te gustó. Te respondemos por WhatsApp.</p>
+    <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="" target="_blank" rel="noopener">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.3-.8-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
+      Escribir por WhatsApp
+    </a>
+    <p class="numero">+51 961 323 186</p>
+    <div class="redes">
+      <a href="https://www.tiktok.com/@banana.deco.party" target="_blank" rel="noopener" data-red="tiktok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.1v6.5A5.5 5.5 0 1 1 11 10v3.2a2.4 2.4 0 1 0 2.4 2.3V3h3.1z"/></svg>
+        TikTok
+      </a>
+      <a href="https://www.instagram.com/banana.decoparty/" target="_blank" rel="noopener" data-red="instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+    <p class="pie">Banana Deco Party · Trujillo, La Libertad</p>
+  </div>
+</footer>
+
+<a class="wa-flot wa" href="https://wa.me/51961323186" data-pkg="" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.3-.8-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
+</a>
+
+<script src="app.js"></script>
+</body>
+</html>
