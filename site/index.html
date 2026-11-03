@@ -101,6 +101,9 @@ a{color:var(--rosa-hondo)}
 .opcion .ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center}
 .opcion.salon .ico{background:#E5F0FB;color:var(--celeste-hondo)}
 .opcion.aire .ico{background:#FCE3EC;color:var(--rosa-hondo)}
+.opcion.deco .ico{background:rgba(242,196,109,.28);color:var(--oro-hondo)}
+.atajo{margin-top:14px;text-align:center;font-size:15px;color:var(--tinta-suave)}
+.atajo a{font-weight:600}
 
 /* Paquetes esenciales */
 .seccion-titulo{display:flex;flex-direction:column;gap:6px;max-width:40ch}
@@ -163,6 +166,99 @@ a{color:var(--rosa-hondo)}
 .supremo .torta i.on{background:var(--oro);box-shadow:0 0 8px var(--oro)}
 .tortas-pie{grid-column:1/-1;text-align:center;font-size:14px;color:rgba(255,255,255,.75);font-variant-numeric:tabular-nums}
 
+/* Combos: decoración + efecto */
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.combos{padding-block:64px 30px}
+.combos .seccion-titulo{margin-inline:auto;align-items:center;text-align:center}
+.combos .seccion-titulo .edicion{align-self:center}
+.armador{margin-top:30px;display:grid;gap:34px}
+.paso{border:0;margin:0;padding:0;min-width:0}
+.paso legend{display:flex;align-items:center;gap:12px;padding:0;margin-bottom:16px;font-family:var(--f-display);font-weight:800;font-size:clamp(24px,5vw,30px);line-height:1.1}
+.paso-n{flex-shrink:0;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;color:var(--blanco);background:var(--rosa)}
+.paso + .paso .paso-n{background:var(--celeste-hondo)}
+.paso + .paso + .paso .paso-n{background:var(--rosa)}
+/* Paso 3: extras opcionales como casillas */
+.extras-combo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:720px}
+.extra-op{display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 16px;border-radius:20px;background:var(--blanco);cursor:pointer;box-shadow:0 2px 0 rgba(58,42,71,.06), 0 10px 30px rgba(184,50,106,.08);transition:box-shadow .2s ease}
+.extra-op:hover{box-shadow:0 2px 0 rgba(58,42,71,.06), 0 14px 36px rgba(184,50,106,.16)}
+.extra-op:has(input:checked){background:var(--algodon-2);box-shadow:inset 0 0 0 3px var(--rosa), 0 10px 30px rgba(184,50,106,.12)}
+.extra-op input{flex-shrink:0;width:22px;height:22px;margin:0;accent-color:var(--rosa-hondo);cursor:pointer}
+.extra-op img{flex-shrink:0;width:60px;height:80px;object-fit:cover;border-radius:12px}
+.extra-op-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.extra-op-txt strong{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:1.1}
+.extra-op-p{font-family:var(--f-display);font-weight:700;font-size:18px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.res-extras{font-size:15px;font-weight:600;color:rgba(255,255,255,.85)}
+.deco,.efecto{position:relative;min-width:0}
+.deco-card,.efecto-card{position:relative;height:100%;background:var(--blanco);box-shadow:0 2px 0 rgba(58,42,71,.06), 0 10px 30px rgba(184,50,106,.08);transition:box-shadow .2s ease}
+.deco-card:hover,.efecto-card:hover{box-shadow:0 2px 0 rgba(58,42,71,.06), 0 14px 36px rgba(184,50,106,.16)}
+/* Anillo de selección encima de la foto */
+.deco-card::before,.efecto-card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;box-shadow:inset 0 0 0 3px transparent;transition:box-shadow .2s ease}
+.deco input:checked + .deco-card::before,.efecto input:checked + .efecto-card::before{box-shadow:inset 0 0 0 3px var(--rosa)}
+.deco input:focus-visible + .deco-card,.efecto input:focus-visible + .efecto-card{outline:3px solid var(--celeste);outline-offset:3px}
+.deco-nombre::after,.efecto-nombre::after{content:"";position:absolute;inset:0;z-index:1;cursor:pointer}
+.decos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.deco-foto.sin-foto{display:grid;place-items:center;color:var(--rosa-hondo);background:linear-gradient(160deg, var(--algodon-2), #E5F0FB)}
+.deco-card{display:flex;flex-direction:column;border-radius:26px;overflow:hidden}
+.deco-foto{position:relative;aspect-ratio:4/3;background:var(--algodon-2)}
+.deco-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* Foto vertical: se recorta el pasto y parte del cielo, el arco queda completo */
+.deco-card.especial .deco-foto img{object-position:50% 52%}
+/* Oh Baby con tarima: la segunda foto aparece encima con un fundido */
+.foto-tarima{opacity:0;transition:opacity .35s ease}
+.deco-card.con-tarima .foto-tarima{opacity:1}
+@media (prefers-reduced-motion: reduce){.foto-tarima{transition:none}}
+.incluye li[hidden]{display:none}
+/* Por encima de la zona clicable de la tarjeta: marcarla no cambia la decoración elegida por sí sola */
+.tarima-opcion{position:relative;z-index:3;display:flex;align-items:center;gap:10px;margin-top:4px;padding:0 14px;min-height:48px;border-radius:14px;background:var(--algodon);box-shadow:inset 0 0 0 1px rgba(58,42,71,.12)}
+.tarima-opcion input{flex-shrink:0;width:22px;height:22px;margin:0;accent-color:var(--rosa-hondo);cursor:pointer}
+.tarima-opcion label{flex:1;min-width:0;padding-block:12px;font-size:16px;font-weight:600;cursor:pointer}
+.tarima-opcion:has(input:checked){background:var(--algodon-2);box-shadow:inset 0 0 0 2px var(--rosa)}
+.marca{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--blanco);background:var(--rosa);box-shadow:0 4px 12px rgba(0,0,0,.25);opacity:0;transform:scale(.6);transition:opacity .2s ease, transform .2s ease}
+.deco input:checked + .deco-card .marca{opacity:1;transform:none}
+.deco-info{display:flex;flex-direction:column;gap:10px;padding:18px 20px 22px}
+.deco-nombre{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,5vw,36px);line-height:1.05;color:var(--celeste-hondo)}
+.deco-desc{font-size:16px;color:var(--tinta-suave)}
+.deco .incluye{font-size:16px}
+.deco-card.especial{background:linear-gradient(170deg, #FFF8E8, var(--blanco) 55%)}
+.deco-card.especial::before{box-shadow:inset 0 0 0 2px rgba(242,196,109,.75)}
+.deco input:checked + .deco-card.especial::before{box-shadow:inset 0 0 0 3px var(--oro), 0 0 0 4px rgba(242,196,109,.25)}
+.deco-card.especial .marca{background:var(--oro);color:var(--noche)}
+.deco-card.especial .deco-nombre{color:var(--oro-hondo)}
+.deco-card.especial .incluye li::before{background:var(--oro)}
+.efectos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.efecto-card{display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:20px}
+.efecto input:checked + .efecto-card{background:var(--algodon-2)}
+.efecto-nombre{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1.1}
+.efecto-det{font-size:15px;color:var(--tinta-suave)}
+/* Precio de cada parte por separado: secundario frente al precio del combo */
+.precio-solo{align-self:flex-start;font-size:14px;font-weight:500;line-height:1.3;color:var(--tinta-suave);background:var(--algodon);padding:4px 10px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(58,42,71,.1);font-variant-numeric:tabular-nums}
+.efecto-card .precio-solo{margin-top:auto}
+.nota-incluye{margin-top:14px;font-size:15px;color:var(--tinta-suave)}
+.combo-final{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;align-items:start}
+.resultado{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:26px;border-radius:28px;color:var(--blanco);background:linear-gradient(160deg, var(--malva), var(--noche));box-shadow:0 18px 50px rgba(58,42,71,.25)}
+.res-vivo{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.res-badge{font-family:var(--f-display);font-weight:700;font-size:16px;color:var(--blanco);background:var(--rosa);padding:4px 14px;border-radius:999px}
+.resultado [hidden]{display:none}
+.a-cotizar{font-family:var(--f-display);font-weight:800;font-size:clamp(36px,8vw,46px);line-height:1;color:#FFB3CB}
+.desde{font-size:17px;font-weight:600;color:rgba(255,255,255,.88)}
+.res-eti{font-size:15px;font-weight:600;color:rgba(255,255,255,.75)}
+.res-nombre{font-size:clamp(30px,6vw,40px)}
+.resultado .precio{font-size:clamp(52px,11vw,66px);color:#FFB3CB}
+.ahorro-bloque{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.por-separado{font-size:17px;color:rgba(255,255,255,.72);font-variant-numeric:tabular-nums}
+.desglose{font-size:14px;color:rgba(255,255,255,.7);font-variant-numeric:tabular-nums}
+.ahorro{font-weight:600;font-size:16px;padding:6px 12px;border-radius:12px;background:rgba(255,255,255,.12);font-variant-numeric:tabular-nums}
+.ahorro-nota{font-size:14px;color:rgba(255,255,255,.65)}
+.sello-mov{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding:7px 14px;border-radius:999px;color:var(--noche);background:var(--oro)}
+.movilidad{padding:24px;border-radius:24px;background:var(--algodon-2)}
+.movilidad h3{font-size:24px}
+.movilidad ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:12px}
+.movilidad li{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600}
+.movilidad li span{min-width:0}
+.movilidad small{display:block;font-weight:400;font-size:14px;color:var(--tinta-suave)}
+.movilidad b{flex-shrink:0;font-family:var(--f-display);font-size:22px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.movilidad li a{flex-shrink:0;font-size:15px}
+
 /* Complementos */
 .extras{padding-block:64px 30px}
 .extras-lista{margin-top:24px;display:grid;gap:12px;max-width:720px}
@@ -171,6 +267,21 @@ a{color:var(--rosa-hondo)}
 .extra strong{display:block;font-family:var(--f-display);font-size:22px;line-height:1.15}
 .extra small{font-size:15px;color:var(--tinta-suave)}
 .extra .p{font-family:var(--f-display);font-weight:800;font-size:28px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+/* Complemento con miniatura: fotos pequeñas, nunca ampliadas */
+.extra.con-foto{flex-wrap:nowrap;justify-content:flex-start}
+.extra.con-foto img{flex-shrink:0;width:72px;height:96px;object-fit:cover;border-radius:14px}
+.extra.con-foto div{flex:1}
+.extra.con-foto .p{flex-shrink:0}
+/* Miniatura que se amplía al tocarla */
+.ver-foto{position:relative;flex-shrink:0;padding:0;border:0;background:none;border-radius:14px;cursor:zoom-in}
+.ver-foto .lupa{position:absolute;right:-6px;bottom:-6px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--blanco);background:var(--rosa-hondo);box-shadow:0 3px 8px rgba(0,0,0,.25)}
+/* Visor de fotos */
+.visor{padding:0;border:0;border-radius:22px;overflow:visible;background:var(--blanco);color:var(--tinta);max-width:min(92vw,460px);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.visor::backdrop{background:rgba(36,24,61,.78)}
+.visor figure{margin:0;padding:12px}
+.visor img{display:block;width:min(436px, calc(92vw - 24px));height:auto;max-height:76vh;object-fit:contain;border-radius:14px;background:var(--algodon-2)}
+.visor figcaption{padding:10px 4px 4px;font-family:var(--f-display);font-weight:700;font-size:20px;text-align:center}
+.visor-cerrar{position:absolute;top:-14px;right:-14px;width:44px;height:44px;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--blanco);background:var(--noche);box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:14px;background:var(--algodon-2);min-width:88px}
 .chip span{font-size:14px;color:var(--tinta-suave)}
@@ -229,12 +340,18 @@ a{color:var(--rosa-hondo)}
   .pasos li > div{display:flex;flex-direction:column;gap:2px}
   .consejos-grid{grid-template-columns:minmax(0,1fr)}
   .muro{padding-block:110px 60px}
+  .decos,.combo-final,.extras-combo{grid-template-columns:minmax(0,1fr)}
+  .efectos-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .resultado{padding:22px}
+  .resultado .btn{align-self:stretch}
 }
 @media (max-width: 420px){
   .elige-grid{grid-template-columns:minmax(0,1fr)}
   .tortas{gap:8px;padding:14px}
   .torta{gap:3px}
   .precio{font-size:40px}
+  .efecto-card{padding:14px}
+  .efecto-nombre{font-size:20px}
 }
 </style>
 </head>
@@ -269,24 +386,25 @@ a{color:var(--rosa-hondo)}
 <main>
 <section class="elige" id="paquetes" aria-labelledby="t-elige">
   <div class="wrap">
-    <h2 id="t-elige">¿Dónde será tu revelación?</h2>
-    <p class="sub">Empieza por el lugar y te mostramos lo que mejor luce ahí.</p>
+    <h2 id="t-elige">¿Cómo quieres tu revelación?</h2>
+    <p class="sub">Elige un camino y te mostramos tus opciones.</p>
     <div class="elige-grid">
-      <a class="opcion salon" href="#confeti">
-        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></span>
-        <strong>En un salón</strong>
-        <small>Lluvia de Confeti</small>
+      <a class="opcion aire" href="#efectos">
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></span>
+        <strong>Solo el efecto</strong>
+        <small>Humo de color, confeti o muro de humo. Desde S/ 199</small>
       </a>
-      <a class="opcion aire" href="#humo">
-        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg></span>
-        <strong>Al aire libre</strong>
-        <small>Humo de Color y muros de humo</small>
+      <a class="opcion deco" href="#combos">
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="8" rx="5" ry="6"/><path d="M12 14l-1.5 2h3z"/><path d="M12 16c0 2-2 3-1 6"/></svg></span>
+        <strong>Decoración + efecto</strong>
+        <small>Tu decoración lista para la foto y tu efecto favorito. Desde S/ 889</small>
       </a>
     </div>
+    <p class="atajo">¿Solo el efecto y ya sabes dónde? <a href="#confeti">En un salón</a> · <a href="#humo">Al aire libre</a></p>
   </div>
 </section>
 
-<section class="esenciales" aria-labelledby="t-esenciales">
+<section class="esenciales" id="efectos" aria-labelledby="t-esenciales">
   <div class="wrap">
     <div class="seccion-titulo">
       <h2 id="t-esenciales">Revelaciones esenciales</h2>
@@ -431,6 +549,178 @@ a{color:var(--rosa-hondo)}
   </div>
 </section>
 
+<section class="combos" id="combos" aria-labelledby="t-combos">
+  <div class="wrap">
+    <div class="seccion-titulo">
+      <span class="edicion">Decoración + efecto</span>
+      <h2 id="t-combos">Arma tu revelación</h2>
+      <p>Elige tu decoración y tu efecto. El precio aparece al instante, con la movilidad en Trujillo incluida.</p>
+    </div>
+
+    <div class="armador" id="armador">
+      <fieldset class="paso">
+        <legend><span class="paso-n" aria-hidden="true">1</span>Elige tu decoración</legend>
+        <div class="decos">
+          <div class="deco">
+            <input class="sr" type="radio" name="deco" id="deco-oh-baby" value="oh-baby" checked aria-describedby="deco-oh-baby-desc">
+            <div class="deco-card">
+              <div class="deco-foto">
+                <img src="assets/deco-oh-baby.jpg" alt="Decoración con letras luminosas OH BABY, globos orgánicos en tonos nude y blanco y osos de peluche en un jardín" loading="lazy" width="1400" height="1050">
+                <img class="foto-tarima" id="foto-oh-baby-tarima" src="assets/deco-oh-baby-tarima.jpg" alt="Decoración con letras luminosas OH BABY sobre tarima blanca, globos orgánicos en tonos nude y detonador Boy or Girl al frente" loading="lazy" width="1400" height="1050" aria-hidden="true">
+                <span class="marca" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+              </div>
+              <div class="deco-info">
+                <span class="precio-solo" data-precio-deco="oh-baby">Decoración sola: S/ 599</span>
+                <label class="deco-nombre" for="deco-oh-baby">Oh Baby</label>
+                <p class="deco-desc" id="deco-oh-baby-desc">Letras luminosas OH BABY de 1 m de alto rodeadas de globos orgánicos en los colores que elijas, con globos burbuja y osos de peluche.</p>
+                <ul class="incluye">
+                  <li>Letras luminosas OH BABY de 1 m de alto</li>
+                  <li>Globos orgánicos en los colores que elijas, con globos burbuja</li>
+                  <li>Osos de peluche</li>
+                  <li>Estructura anti-viento en exteriores</li>
+                  <li id="oh-baby-tarima-item" hidden>Tarima de 4 × 2 m</li>
+                </ul>
+                <div class="tarima-opcion">
+                  <input type="checkbox" id="tarima-oh-baby" name="tarima" value="si">
+                  <label for="tarima-oh-baby">Agrega tarima (4 × 2 m) por S/ <span data-precio-tarima>279</span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="deco">
+            <input class="sr" type="radio" name="deco" id="deco-baby-monumental" value="baby-monumental" aria-describedby="deco-baby-monumental-desc">
+            <div class="deco-card especial">
+              <div class="deco-foto">
+                <img src="assets/deco-baby-monumental.jpg" alt="Arco blanco de 3 metros con guirnalda de globos blancos y burbuja, letras gigantes BABY sobre un podio y tarima en un jardín" loading="lazy" width="1050" height="1400">
+                <span class="marca" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+              </div>
+              <div class="deco-info">
+                <span class="precio-solo" data-precio-deco="baby-monumental">Decoración sola: S/ 1,739</span>
+                <span class="edicion">Edición especial</span>
+                <label class="deco-nombre" for="deco-baby-monumental">Baby Monumental</label>
+                <p class="deco-desc" id="deco-baby-monumental-desc">Un arco de 3 m de alto y 5 m de ancho con guirnalda de globos, letras gigantes BABY sobre podio y tarima. Para revelaciones que se ven desde lejos.</p>
+                <ul class="incluye">
+                  <li>Arco de 3 m de alto por 5 m de ancho</li>
+                  <li>Tarima y podio para las letras</li>
+                  <li>Letras gigantes BABY de 1.7 m de alto</li>
+                  <li>Guirnalda de globos orgánicos con globos burbuja</li>
+                  <li>Oso de peluche</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="deco">
+            <input class="sr" type="radio" name="deco" id="deco-propia" value="propia" aria-describedby="deco-propia-desc">
+            <div class="deco-card">
+              <div class="deco-foto sin-foto">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v12H3z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span class="marca" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+              </div>
+              <div class="deco-info">
+                <span class="precio-solo">Precio según tu idea</span>
+                <label class="deco-nombre" for="deco-propia">Tengo mi propia idea</label>
+                <p class="deco-desc" id="deco-propia-desc">¿Viste una decoración que te encantó? Envíanos la foto y te la cotizamos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="paso">
+        <legend><span class="paso-n" aria-hidden="true">2</span>Elige tu efecto</legend>
+        <div class="efectos-grid">
+          <div class="efecto">
+            <input class="sr" type="radio" name="efecto" id="ef-confeti" value="confeti">
+            <div class="efecto-card">
+              <span class="tag salon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Interiores</span>
+              <label class="efecto-nombre" for="ef-confeti">Lluvia de Confeti</label>
+              <span class="efecto-det">Cañón profesional de confeti</span>
+              <span class="precio-solo" data-precio-efecto="confeti">Efecto solo: S/ 349</span>
+            </div>
+          </div>
+          <div class="efecto">
+            <input class="sr" type="radio" name="efecto" id="ef-cortina" value="cortina">
+            <div class="efecto-card">
+              <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
+              <label class="efecto-nombre" for="ef-cortina">Cortina de Color</label>
+              <span class="efecto-det">Muro de humo de 64 disparos</span>
+              <span class="precio-solo" data-precio-efecto="cortina">Efecto solo: S/ 649</span>
+            </div>
+          </div>
+          <div class="efecto">
+            <input class="sr" type="radio" name="efecto" id="ef-intenso" value="intenso" checked>
+            <div class="efecto-card">
+              <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
+              <label class="efecto-nombre" for="ef-intenso">Muro Intenso</label>
+              <span class="efecto-det">Muro de humo de 100 disparos</span>
+              <span class="precio-solo" data-precio-efecto="intenso">Efecto solo: S/ 849</span>
+            </div>
+          </div>
+          <div class="efecto">
+            <input class="sr" type="radio" name="efecto" id="ef-supremo" value="supremo">
+            <div class="efecto-card">
+              <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
+              <label class="efecto-nombre" for="ef-supremo">Muro Supremo</label>
+              <span class="efecto-det">Muro de humo de 144 disparos</span>
+              <span class="precio-solo" data-precio-efecto="supremo">Efecto solo: S/ 999</span>
+            </div>
+          </div>
+        </div>
+        <p class="nota-incluye">Todos incluyen 2 chisperos de llama fría, detonador para los papás, operador y equipo de montaje.</p>
+      </fieldset>
+
+      <fieldset class="paso">
+        <legend><span class="paso-n" aria-hidden="true">3</span>Suma un extra (opcional)</legend>
+        <div class="extras-combo">
+          <label class="extra-op">
+            <input type="checkbox" name="extra" value="cuadro">
+            <img src="assets/extra-cuadro-bienvenida.jpg" alt="" loading="lazy" width="224" height="336">
+            <span class="extra-op-txt"><strong>Cuadro de bienvenida</strong><span class="extra-op-p" data-precio-extra="cuadro">S/ 79</span></span>
+          </label>
+          <label class="extra-op">
+            <input type="checkbox" name="extra" value="caja">
+            <img src="assets/extra-caja-sorpresa.jpg" alt="" loading="lazy" width="224" height="326">
+            <span class="extra-op-txt"><strong>Caja sorpresa</strong><span class="extra-op-p" data-precio-extra="caja">S/ 149</span></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="combo-final">
+        <div class="resultado">
+          <div class="res-vivo" aria-live="polite">
+            <span class="res-badge" id="combo-badge">El más elegido</span>
+            <p class="res-eti">Tu combo</p>
+            <h3 class="res-nombre" id="combo-nombre">Oh Baby + Muro Intenso</h3>
+            <p class="res-extras" id="combo-extras" hidden></p>
+            <p class="precio" id="combo-precio-fila"><small>S/</small><span id="combo-precio">1,289</span></p>
+            <p class="a-cotizar" id="combo-cotizar" hidden>Decoración a cotizar</p>
+            <p class="desde" id="combo-desde" hidden></p>
+            <div class="ahorro-bloque" id="combo-ahorro-bloque">
+              <p class="por-separado" id="combo-separado-fila"><s>Por separado: S/ <span id="combo-separado">1,448</span></s></p>
+              <p class="desglose" id="combo-desglose">Decoración S/ 599 + efecto S/ 849</p>
+              <p class="ahorro" id="combo-ahorro">Ahorras S/ 159</p>
+              <p class="ahorro-nota" id="combo-ahorro-nota">Mientras más grande tu revelación, más ahorras.</p>
+            </div>
+          </div>
+          <span class="sello-mov" id="combo-movilidad"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>Movilidad incluida en Trujillo</span>
+          <a class="btn btn-wa" id="combo-wa" href="https://wa.me/51961323186" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.3-.8-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
+            <span id="combo-wa-texto">Reservar por WhatsApp</span>
+          </a>
+        </div>
+        <div class="movilidad">
+          <h3>¿Tu revelación es fuera de Trujillo?</h3>
+          <ul>
+            <li><span>Zona intermedia<small>Huanchaco, Moche, Laredo, Salaverry</small></span><b>+S/ 79</b></li>
+            <li><span>Jornada completa<small>Simbal y lugares a ~1 hora</small></span><b>+S/ 379</b></li>
+            <li><span>Más lejos<small>Te cotizamos según el lugar</small></span><a class="wa" href="https://wa.me/51961323186" data-pkg="" target="_blank" rel="noopener">Cotizar por WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="extras" aria-labelledby="t-extras">
   <div class="wrap">
     <div class="seccion-titulo">
@@ -453,6 +743,22 @@ a{color:var(--rosa-hondo)}
           <div class="chip"><span>25 disparos</span><b>S/ 149</b></div>
           <div class="chip"><span>36 disparos</span><b>S/ 199</b></div>
         </div>
+      </div>
+      <div class="extra con-foto">
+        <button class="ver-foto" type="button" data-ampliar="Cuadro de bienvenida" aria-label="Ver foto ampliada del cuadro de bienvenida">
+          <img src="assets/extra-cuadro-bienvenida.jpg" alt="Cuadro de bienvenida en foam sobre caballete, junto a una columna de globos rosados y celestes" loading="lazy" width="224" height="336">
+          <span class="lupa" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/><path d="M10.5 7.5v6M7.5 10.5h6"/></svg></span>
+        </button>
+        <div><strong>Cuadro de bienvenida</strong><small>Cuadro en foam con tu mensaje, caballete y globos.</small></div>
+        <span class="p" data-precio-extra="cuadro">S/ 79</span>
+      </div>
+      <div class="extra con-foto">
+        <button class="ver-foto" type="button" data-ampliar="Caja sorpresa" aria-label="Ver foto ampliada de la caja sorpresa">
+          <img src="assets/extra-caja-sorpresa.jpg" alt="Dos cajas blancas de revelación con globos rosados y celestes y letras GIRL y BOY" loading="lazy" width="224" height="326">
+          <span class="lupa" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/><path d="M10.5 7.5v6M7.5 10.5h6"/></svg></span>
+        </button>
+        <div><strong>Caja sorpresa</strong><small>Caja decorada de 60 × 60 × 70 cm con 10 globos de helio y la palabra Girl o Boy. Al abrirla, salen los globos del color del bebé.</small></div>
+        <span class="p" data-precio-extra="caja">S/ 149</span>
       </div>
     </div>
     <p class="nota">Disponibles solo como complemento de un paquete.</p>
@@ -529,6 +835,16 @@ a{color:var(--rosa-hondo)}
 <a class="wa-flot wa" href="https://wa.me/51961323186" data-pkg="" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
   <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.3-.8-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
 </a>
+
+<dialog class="visor" id="visor" aria-labelledby="visor-titulo">
+  <figure>
+    <img id="visor-img" alt="">
+    <figcaption id="visor-titulo"></figcaption>
+  </figure>
+  <button class="visor-cerrar" type="button" aria-label="Cerrar foto">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</dialog>
 
 <script src="app.js"></script>
 </body>

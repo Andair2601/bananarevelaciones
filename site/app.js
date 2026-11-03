@@ -325,12 +325,14 @@
     }
   };
 
-  function lanzar(el) {
+  function efecto(tipo, nivel) {
     // El confeti que siga en el aire (p. ej. el de la portada) no se mezcla con este efecto
     P.forEach(function (p) { if (p.k === 0 && !p.fade) p.fade = 1; });
-    var tipo = el.getAttribute('data-fx');
-    if (tipo === 'muro') FX.muro(Number(el.getAttribute('data-nivel')));
+    if (tipo === 'muro') FX.muro(nivel);
     else if (FX[tipo]) FX[tipo]();
+  }
+  function lanzar(el) {
+    efecto(el.getAttribute('data-fx'), Number(el.getAttribute('data-nivel')));
   }
 
   // ===== Cuenta regresiva de la portada =====
@@ -393,4 +395,202 @@
       if (el) { ultimo.set(el, Date.now()); lanzar(el); }
     });
   });
+
+  // ===== Visor: amplía las fotos de los complementos =====
+  var visor = document.getElementById('visor');
+  if (visor && visor.showModal) {
+    var visorImg = document.getElementById('visor-img'), visorTitulo = document.getElementById('visor-titulo'), visorOrigen = null;
+    document.querySelectorAll('[data-ampliar]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var img = b.querySelector('img');
+        // Misma proporción que la miniatura antes de cargar: el visor no salta al abrirse
+        visorImg.setAttribute('width', img.getAttribute('width'));
+        visorImg.setAttribute('height', img.getAttribute('height'));
+        visorImg.src = img.currentSrc || img.src;
+        visorImg.alt = img.alt;
+        visorTitulo.textContent = b.getAttribute('data-ampliar');
+        visorOrigen = b;
+        visor.showModal();
+      });
+    });
+    visor.querySelector('.visor-cerrar').addEventListener('click', function () { visor.close(); });
+    // Tocar fuera de la foto (el fondo oscuro) también cierra
+    visor.addEventListener('click', function (ev) { if (ev.target === visor) visor.close(); });
+    // Al cerrar, el foco vuelve a la miniatura que lo abrió
+    visor.addEventListener('close', function () { if (visorOrigen) visorOrigen.focus(); });
+  }
+
+  // ===== Combos: decoración + efecto =====
+  // Única fuente de precios de la sección (soles; los combos incluyen movilidad en Trujillo).
+  // El ahorro se calcula: (decoración sola + efecto solo) - combo.
+  // "propia": decoración del cliente, se cotiza aparte; solo se muestra el precio del efecto solo.
+  // La tarima (solo Oh Baby) suma lo mismo al combo y a la decoración sola: el ahorro no cambia.
+  // Los extras tampoco llevan descuento: suman igual al combo y al precio por separado.
+  var COMBOS = {
+    tarima: { precio: 279, deco: 'oh-baby' },
+    extras: {
+      cuadro: { nombre: 'Cuadro de bienvenida', precio: 79 },
+      caja: { nombre: 'Caja sorpresa', precio: 149 }
+    },
+    decoraciones: {
+      'oh-baby': { nombre: 'Oh Baby', precio: 599 },
+      'baby-monumental': { nombre: 'Baby Monumental', precio: 1739 }
+    },
+    efectos: {
+      confeti: { nombre: 'Lluvia de Confeti', fx: 'confeti', precio: 349 },
+      cortina: { nombre: 'Cortina de Color', fx: 'muro', nivel: 1, precio: 649 },
+      intenso: { nombre: 'Muro Intenso', fx: 'muro', nivel: 2, precio: 849 },
+      supremo: { nombre: 'Muro Supremo', fx: 'muro', nivel: 3, precio: 999 }
+    },
+    combos: {
+      'oh-baby': { confeti: 889, cortina: 1139, intenso: 1289, supremo: 1389 },
+      'baby-monumental': { confeti: 1929, cortina: 2179, intenso: 2329, supremo: 2429 }
+    },
+    recomendado: { decoracion: 'oh-baby', efecto: 'intenso' }
+  };
+
+  var soles = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+  // Precio de los extras en complementos y en el paso 3
+  document.querySelectorAll('[data-precio-extra]').forEach(function (n) {
+    n.textContent = 'S/ ' + soles(COMBOS.extras[n.getAttribute('data-precio-extra')].precio);
+  });
+
+  var armador = document.getElementById('armador');
+  if (armador) {
+    var ui = {
+      nombre: document.getElementById('combo-nombre'),
+      extras: document.getElementById('combo-extras'),
+      precio: document.getElementById('combo-precio'),
+      precioFila: document.getElementById('combo-precio-fila'),
+      bloqueAhorro: document.getElementById('combo-ahorro-bloque'),
+      separadoFila: document.getElementById('combo-separado-fila'),
+      separado: document.getElementById('combo-separado'),
+      desglose: document.getElementById('combo-desglose'),
+      ahorro: document.getElementById('combo-ahorro'),
+      ahorroNota: document.getElementById('combo-ahorro-nota'),
+      badge: document.getElementById('combo-badge'),
+      cotizar: document.getElementById('combo-cotizar'),
+      desde: document.getElementById('combo-desde'),
+      movilidad: document.getElementById('combo-movilidad'),
+      wa: document.getElementById('combo-wa'),
+      waTexto: document.getElementById('combo-wa-texto'),
+      tarima: document.getElementById('tarima-oh-baby'),
+      tarimaItem: document.getElementById('oh-baby-tarima-item'),
+      fotoTarima: document.getElementById('foto-oh-baby-tarima'),
+      decoTarima: document.getElementById('deco-' + COMBOS.tarima.deco)
+    };
+    var elegido = function (nombre) { var r = armador.querySelector('input[name="' + nombre + '"]:checked'); return r ? r.value : null; };
+
+    // Precio de la decoración sola; con tarima solo en la decoración que la ofrece
+    var precioDecoSola = function (d) {
+      return COMBOS.decoraciones[d].precio + (d === COMBOS.tarima.deco && ui.tarima.checked ? COMBOS.tarima.precio : 0);
+    };
+
+    // Etiquetas de precio por separado (paso 1 y paso 2)
+    var etiquetas = function () {
+      armador.querySelectorAll('[data-precio-deco]').forEach(function (n) {
+        n.textContent = 'Decoración sola: S/ ' + soles(precioDecoSola(n.getAttribute('data-precio-deco')));
+      });
+    };
+    armador.querySelectorAll('[data-precio-efecto]').forEach(function (n) {
+      n.textContent = 'Efecto solo: S/ ' + soles(COMBOS.efectos[n.getAttribute('data-precio-efecto')].precio);
+    });
+    armador.querySelectorAll('[data-precio-tarima]').forEach(function (n) { n.textContent = soles(COMBOS.tarima.precio); });
+
+    // Extras marcados, en el orden de COMBOS.extras
+    var extrasMarcados = function () {
+      return Object.keys(COMBOS.extras).filter(function (id) {
+        return armador.querySelector('input[name="extra"][value="' + id + '"]').checked;
+      }).map(function (id) { return COMBOS.extras[id]; });
+    };
+    var minus = function (x) { return x.nombre.toLowerCase(); };
+    var listaY = function (arr) { return arr.length > 1 ? arr.slice(0, -1).join(', ') + ' y ' + arr[arr.length - 1] : arr.join(''); };
+
+    var combo = function () {
+      var d = elegido('deco'), e = elegido('efecto'), ef = COMBOS.efectos[e];
+      var ex = extrasMarcados(), sumaExtras = ex.reduce(function (s, x) { return s + x.precio; }, 0);
+      var conExtras = ex.length ? ' con ' + listaY(ex.map(minus)) : '';
+      if (d === 'propia') {
+        return { deco: d, efecto: e, propia: true, extras: ex, nombre: 'Tu idea + ' + ef.nombre,
+          pixel: 'Decoración propia + ' + ef.nombre + conExtras };
+      }
+      var deco = COMBOS.decoraciones[d];
+      var conTarima = d === COMBOS.tarima.deco && ui.tarima.checked, extra = conTarima ? COMBOS.tarima.precio : 0;
+      var nombre = deco.nombre + (conTarima ? ' con tarima' : '') + ' + ' + ef.nombre;
+      var precio = COMBOS.combos[d][e] + extra + sumaExtras, precioDeco = deco.precio + extra;
+      var porSeparado = precioDeco + ef.precio + sumaExtras;
+      return { deco: d, efecto: e, nombre: nombre, pixel: nombre + conExtras, precio: precio, conTarima: conTarima, extras: ex,
+        precioDecoBase: deco.precio, precioDeco: precioDeco, precioEfecto: ef.precio,
+        porSeparado: porSeparado, ahorro: porSeparado - precio };
+    };
+    // Datos del Pixel: la decoración propia no tiene precio todavía
+    var datosPixel = function (c) {
+      return c.propia ? { content_name: c.pixel } : { content_name: c.pixel, value: c.precio, currency: 'PEN' };
+    };
+
+    var actualizar = function () {
+      var c = combo(), ef = COMBOS.efectos[c.efecto], msg;
+      // Tarjeta Oh Baby: foto, lista y precio reflejan la casilla aunque esté elegida otra decoración
+      var tarima = ui.tarima.checked;
+      ui.decoTarima.nextElementSibling.classList.toggle('con-tarima', tarima);
+      ui.fotoTarima.setAttribute('aria-hidden', String(!tarima));
+      ui.fotoTarima.previousElementSibling.setAttribute('aria-hidden', String(tarima));
+      ui.tarimaItem.hidden = !tarima;
+      etiquetas();
+      ui.nombre.textContent = c.nombre;
+      ui.extras.hidden = !c.extras.length;
+      ui.extras.textContent = 'Incluye: ' + c.extras.map(function (x) {
+        return minus(x) + (c.propia ? ' S/ ' + soles(x.precio) : '');
+      }).join(', ');
+      ui.precioFila.hidden = ui.bloqueAhorro.hidden = ui.movilidad.hidden = !!c.propia;
+      ui.cotizar.hidden = ui.desde.hidden = !c.propia;
+      ui.badge.hidden = c.propia || !(c.deco === COMBOS.recomendado.decoracion && c.efecto === COMBOS.recomendado.efecto);
+      if (c.propia) {
+        ui.desde.textContent = ef.nombre + ' desde S/ ' + soles(ef.precio);
+        ui.waTexto.textContent = 'Enviar mi idea por WhatsApp';
+        msg = 'Hola Banana Deco Party, tengo una decoración de referencia y quiero cotizarla con el efecto ' + ef.nombre +
+          (c.extras.length ? ', más ' + listaY(c.extras.map(function (x) { return minus(x) + ' (S/ ' + soles(x.precio) + ')'; })) : '') +
+          '. Les envío la foto. Mi fecha es: ___ y el lugar: ___';
+      } else {
+        ui.precio.textContent = soles(c.precio);
+        ui.desglose.textContent = 'Decoración S/ ' + soles(c.precioDecoBase) +
+          (c.conTarima ? ' + tarima S/ ' + soles(COMBOS.tarima.precio) : '') + ' + efecto S/ ' + soles(c.precioEfecto) +
+          c.extras.map(function (x) { return ' + ' + minus(x) + ' S/ ' + soles(x.precio); }).join('');
+        // Sin ahorro real no se muestra el precio tachado ni el ahorro
+        ui.separadoFila.hidden = ui.ahorro.hidden = ui.ahorroNota.hidden = c.ahorro <= 0;
+        ui.separado.textContent = soles(c.porSeparado);
+        ui.ahorro.textContent = 'Ahorras S/ ' + soles(c.ahorro);
+        ui.waTexto.textContent = 'Reservar por WhatsApp';
+        msg = 'Hola Banana Deco Party, me interesa el combo ' + c.pixel +
+          ' (S/ ' + soles(c.precio) + ') para mi revelación de género. ¿Tienen disponible mi fecha?';
+      }
+      ui.wa.href = base + encodeURIComponent(msg);
+      return c;
+    };
+    actualizar();
+
+    armador.addEventListener('change', function (ev) {
+      // Marcar la tarima elige Oh Baby; desmarcarla no cambia la decoración elegida
+      if (ev.target === ui.tarima && ui.tarima.checked) ui.decoTarima.checked = true;
+      var c = actualizar();
+      track('CustomizeProduct', datosPixel(c));
+      if (ev.target.name === 'efecto' && !reduce) {
+        var fx = COMBOS.efectos[c.efecto];
+        efecto(fx.fx, fx.nivel);
+      }
+    });
+    ui.wa.addEventListener('click', function () {
+      track('Contact', datosPixel(combo()));
+    });
+
+    if ('IntersectionObserver' in window) {
+      var ioCombos = new IntersectionObserver(function (entradas) {
+        if (!entradas.some(function (en) { return en.isIntersecting; })) return;
+        ioCombos.disconnect();
+        ui.fotoTarima.loading = 'eager'; // precarga: el cambio de foto al marcar la tarima es inmediato
+        track('ViewContent', { content_name: 'Combos decoración' });
+      }, { threshold: 0.1 });
+      ioCombos.observe(document.getElementById('combos'));
+    }
+  }
 })();
