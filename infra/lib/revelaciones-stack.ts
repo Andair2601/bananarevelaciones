@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
@@ -139,8 +140,13 @@ function handler(event) {
       distributionPaths: [`/${CATALOGO}/*`],
     });
 
-    // index.html con la URL real de CloudFront en las etiquetas para compartir (og:image)
-    const html = fs.readFileSync(path.join(sitioDir, 'index.html'), 'utf8').split('__SITE_URL__').join(urlSitio);
+    // index.html con la URL real de CloudFront en las etiquetas para compartir (og:image).
+    // app.js se cachea un día en el navegador: se pide con una huella de su contenido (app.js?v=…)
+    // para que cada cambio llegue al instante y, si no cambió, se siga usando la copia guardada.
+    const versionJs = crypto.createHash('sha256').update(fs.readFileSync(path.join(sitioDir, 'app.js'))).digest('hex').slice(0, 10);
+    const htmlFuente = fs.readFileSync(path.join(sitioDir, 'index.html'), 'utf8');
+    if (!htmlFuente.includes('src="app.js"')) throw new Error('index.html debe cargar <script src="app.js">');
+    const html = htmlFuente.split('__SITE_URL__').join(urlSitio).split('src="app.js"').join(`src="app.js?v=${versionJs}"`);
     new s3deploy.BucketDeployment(this, 'Pagina', {
       sources: [s3deploy.Source.data('index.html', html)],
       destinationBucket: bucket,
