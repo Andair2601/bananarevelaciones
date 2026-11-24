@@ -64,8 +64,9 @@ Las etiquetas para compartir (la vista previa del link en WhatsApp/Facebook) se 
 
 Cambia los archivos en `site/` y vuelve a ejecutar `npx cdk deploy -c env=prod`. El despliegue limpia la caché de CloudFront.
 
-- **Precios o textos**: `site/index.html` (cada paquete tiene `data-price` en su botón de WhatsApp; cámbialo junto con el precio visible).
-- **Videos**: cada uno (`humo-color`, `confeti`, `humo`) tiene dos versiones en `site/assets/`: `nombre.mp4` (1080×1920, hasta ~7 MB, para pantallas grandes) y `nombre-720.mp4` (720×1280, 2–4 MB, para celulares), más su póster `nombre.jpg` (720×1280). Reemplaza las tres con el mismo nombre, en MP4 H.264 sin audio, y despliega con `cdk deploy`, no a mano en S3. Mantén clips cortos (10–15 s).
+- **Precios**: solo en el objeto `PRECIOS` al inicio de `site/app.js`. Paquetes, combos, adicionales, movilidad, textos "Desde", botones de WhatsApp y Pixel leen de ahí. Si cambias uno, actualiza también el número de respaldo que tiene el HTML (se ve un instante antes de que cargue el script). Los combos valen decoración + efecto, sin descuento.
+- **Textos**: `site/index.html`.
+- **Videos**: `humo-color` y `confeti` tienen dos versiones en `site/assets/`: `nombre.mp4` (1080×1920, hasta ~7 MB, para pantallas grandes) y `nombre-720.mp4` (720×1280, 2–4 MB, para celulares), más su póster `nombre.jpg` (720×1280). El video de muros de humo es uno solo, `muro.mp4` (720×1280, el original es de menor resolución) con su póster `muro.jpg`. En MP4 H.264 sin audio, y despliega con `cdk deploy`, no a mano en S3. Mantén clips cortos (8–15 s). Si reemplazas un video, usa un nombre nuevo y actualízalo en `index.html`: con el mismo nombre, quien ya visitó la página puede ver el anterior hasta un día.
 - **Sello SUCAMEC**: cuando tengas el permiso, se puede agregar en la portada junto a los otros sellos.
 
 ## Probar en tu computadora

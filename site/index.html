@@ -178,12 +178,18 @@ a{color:var(--rosa-hondo)}
 .paso + .paso .paso-n{background:var(--celeste-hondo)}
 .paso + .paso + .paso .paso-n{background:var(--rosa)}
 /* Paso 3: extras opcionales como casillas */
-.extras-combo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:720px}
+.extras-combo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .extra-op{display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 16px;border-radius:20px;background:var(--blanco);cursor:pointer;box-shadow:0 2px 0 rgba(58,42,71,.06), 0 10px 30px rgba(184,50,106,.08);transition:box-shadow .2s ease}
 .extra-op:hover{box-shadow:0 2px 0 rgba(58,42,71,.06), 0 14px 36px rgba(184,50,106,.16)}
 .extra-op:has(input:checked){background:var(--algodon-2);box-shadow:inset 0 0 0 3px var(--rosa), 0 10px 30px rgba(184,50,106,.12)}
 .extra-op input{flex-shrink:0;width:22px;height:22px;margin:0;accent-color:var(--rosa-hondo);cursor:pointer}
 .extra-op img{flex-shrink:0;width:60px;height:80px;object-fit:cover;border-radius:12px}
+.extra-op:has(input:disabled){cursor:default;background:var(--algodon-2)}
+.extra-op:has(input:disabled) input{cursor:default}
+.extra-op-regalo{font-size:13px;font-weight:700;color:var(--oro-hondo)}
+.extra-op-regalo[hidden]{display:none}
+/* Fotos con texto (espejo): se muestran completas, sin recortar */
+.extra-op img.completa,.extra.con-foto img.completa{object-fit:contain;background:var(--algodon-2)}
 .extra-op-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
 .extra-op-txt strong{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:1.1}
 .extra-op-p{font-family:var(--f-display);font-weight:700;font-size:18px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
@@ -201,8 +207,6 @@ a{color:var(--rosa-hondo)}
 .deco-card{display:flex;flex-direction:column;border-radius:26px;overflow:hidden}
 .deco-foto{position:relative;aspect-ratio:4/3;background:var(--algodon-2)}
 .deco-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-/* Foto vertical: se recorta el pasto y parte del cielo, el arco queda completo */
-.deco-card.especial .deco-foto img{object-position:50% 52%}
 /* Oh Baby con tarima: la segunda foto aparece encima con un fundido */
 .foto-tarima{opacity:0;transition:opacity .35s ease}
 .deco-card.con-tarima .foto-tarima{opacity:1}
@@ -230,9 +234,11 @@ a{color:var(--rosa-hondo)}
 .efecto input:checked + .efecto-card{background:var(--algodon-2)}
 .efecto-nombre{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1.1}
 .efecto-det{font-size:15px;color:var(--tinta-suave)}
-/* Precio de cada parte por separado: secundario frente al precio del combo */
-.precio-solo{align-self:flex-start;font-size:14px;font-weight:500;line-height:1.3;color:var(--tinta-suave);background:var(--algodon);padding:4px 10px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(58,42,71,.1);font-variant-numeric:tabular-nums}
-.efecto-card .precio-solo{margin-top:auto}
+/* Precio de cada decoración y efecto en sus tarjetas */
+.precio-solo{align-self:flex-start;font-family:var(--f-display);font-weight:800;font-size:26px;line-height:1;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.efecto-card .precio-solo{margin-top:auto;font-size:22px}
+.deco-card.especial .precio-solo{color:var(--oro-hondo)}
+.precio-solo.nota-precio{font-family:var(--f-body);font-size:16px;font-weight:700;color:var(--tinta-suave)}
 .nota-incluye{margin-top:14px;font-size:15px;color:var(--tinta-suave)}
 .combo-final{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;align-items:start}
 .resultado{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:26px;border-radius:28px;color:var(--blanco);background:linear-gradient(160deg, var(--malva), var(--noche));box-shadow:0 18px 50px rgba(58,42,71,.25)}
@@ -244,11 +250,9 @@ a{color:var(--rosa-hondo)}
 .res-eti{font-size:15px;font-weight:600;color:rgba(255,255,255,.75)}
 .res-nombre{font-size:clamp(30px,6vw,40px)}
 .resultado .precio{font-size:clamp(52px,11vw,66px);color:#FFB3CB}
-.ahorro-bloque{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-.por-separado{font-size:17px;color:rgba(255,255,255,.72);font-variant-numeric:tabular-nums}
 .desglose{font-size:14px;color:rgba(255,255,255,.7);font-variant-numeric:tabular-nums}
-.ahorro{font-weight:600;font-size:16px;padding:6px 12px;border-radius:12px;background:rgba(255,255,255,.12);font-variant-numeric:tabular-nums}
-.ahorro-nota{font-size:14px;color:rgba(255,255,255,.65)}
+/* Regalo del combo: beneficio, nunca descuento */
+.regalo{align-self:flex-start;display:inline-block;font-weight:700;font-size:15px;line-height:1.35;padding:6px 12px;border-radius:12px;color:var(--noche);background:linear-gradient(120deg, #FFE2A3, var(--oro))}
 .sello-mov{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding:7px 14px;border-radius:999px;color:var(--noche);background:var(--oro)}
 .movilidad{padding:24px;border-radius:24px;background:var(--algodon-2)}
 .movilidad h3{font-size:24px}
@@ -258,6 +262,10 @@ a{color:var(--rosa-hondo)}
 .movilidad small{display:block;font-weight:400;font-size:14px;color:var(--tinta-suave)}
 .movilidad b{flex-shrink:0;font-family:var(--f-display);font-size:22px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
 .movilidad li a{flex-shrink:0;font-size:15px}
+.movilidad li.mov-zona{flex-direction:column;align-items:stretch;gap:8px}
+.movilidad .chip{min-width:0;flex:1 1 86px;background:var(--blanco)}
+.movilidad .chip.activa{box-shadow:inset 0 0 0 2px var(--rosa)}
+.movilidad .chip b{font-size:20px}
 
 /* Complementos */
 .extras{padding-block:64px 30px}
@@ -286,6 +294,7 @@ a{color:var(--rosa-hondo)}
 .chip{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:14px;background:var(--algodon-2);min-width:88px}
 .chip span{font-size:14px;color:var(--tinta-suave)}
 .chip b{font-family:var(--f-display);font-size:22px;color:var(--rosa-hondo);font-variant-numeric:tabular-nums}
+.chip b span{font-size:inherit;color:inherit}
 .nota{margin-top:12px;font-size:15px;color:var(--tinta-suave)}
 
 /* Cómo se vive */
@@ -392,12 +401,12 @@ a{color:var(--rosa-hondo)}
       <a class="opcion aire" href="#efectos">
         <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></span>
         <strong>Solo el efecto</strong>
-        <small>Humo de color, confeti o muro de humo. Desde S/ 199</small>
+        <small>Humo de color, confeti o muro de humo. Desde S/ <span data-desde="efecto">199</span></small>
       </a>
       <a class="opcion deco" href="#combos">
         <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="8" rx="5" ry="6"/><path d="M12 14l-1.5 2h3z"/><path d="M12 16c0 2-2 3-1 6"/></svg></span>
         <strong>Decoración + efecto</strong>
-        <small>Tu decoración lista para la foto y tu efecto favorito. Desde S/ 889</small>
+        <small>Tu decoración lista para la foto y tu efecto favorito. Desde S/ <span data-desde="combo">998</span></small>
       </a>
     </div>
     <p class="atajo">¿Solo el efecto y ya sabes dónde? <a href="#confeti">En un salón</a> · <a href="#humo">Al aire libre</a></p>
@@ -411,7 +420,7 @@ a{color:var(--rosa-hondo)}
       <p>Sencillas, rápidas de montar y con todo el efecto en el momento justo.</p>
     </div>
 
-    <article class="paquete" id="humo" data-fx="humo" data-pkg="Humo de Color" data-price="199">
+    <article class="paquete" id="humo" data-fx="humo" data-pkg="Humo de Color" data-price="199" data-precio-attr="efectos.humo">
       <div class="media">
         <video poster="assets/humo-color.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación con humo celeste y chisperos de llama fría">
           <source src="assets/humo-color-720.mp4" type="video/mp4" media="(max-width: 600px)">
@@ -429,14 +438,14 @@ a{color:var(--rosa-hondo)}
           <li>Operador que dirige la cuenta regresiva</li>
         </ul>
         <div class="precio-fila">
-          <p class="precio"><small>S/</small>199</p>
-          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Humo de Color" data-price="199" target="_blank" rel="noopener">Reservar Humo de Color</a>
+          <p class="precio"><small>S/</small><span data-precio="efectos.humo">199</span></p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Humo de Color" data-price="199" data-precio-attr="efectos.humo" target="_blank" rel="noopener">Reservar Humo de Color</a>
           <button class="btn btn-replay" type="button" data-replay="humo">Ver efecto</button>
         </div>
       </div>
     </article>
 
-    <article class="paquete inv" id="confeti" data-fx="confeti" data-pkg="Lluvia de Confeti" data-price="349">
+    <article class="paquete inv" id="confeti" data-fx="confeti" data-pkg="Lluvia de Confeti" data-price="349" data-precio-attr="efectos.confeti">
       <div class="media">
         <video poster="assets/confeti.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación con lluvia de confeti rosa en un salón">
           <source src="assets/confeti-720.mp4" type="video/mp4" media="(max-width: 600px)">
@@ -455,8 +464,8 @@ a{color:var(--rosa-hondo)}
           <li>Operador y equipo de montaje</li>
         </ul>
         <div class="precio-fila">
-          <p class="precio"><small>S/</small>349</p>
-          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Lluvia de Confeti" data-price="349" target="_blank" rel="noopener">Reservar Lluvia de Confeti</a>
+          <p class="precio"><small>S/</small><span data-precio="efectos.confeti">349</span></p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Lluvia de Confeti" data-price="349" data-precio-attr="efectos.confeti" target="_blank" rel="noopener">Reservar Lluvia de Confeti</a>
           <button class="btn btn-replay" type="button" data-replay="confeti">Ver efecto</button>
         </div>
       </div>
@@ -473,9 +482,8 @@ a{color:var(--rosa-hondo)}
 
     <div class="muro-intro">
       <div class="media">
-        <video poster="assets/humo.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación al aire libre con humo celeste y chisperos">
-          <source src="assets/humo-720.mp4" type="video/mp4" media="(max-width: 600px)">
-          <source src="assets/humo.mp4" type="video/mp4">
+        <video poster="assets/muro.jpg" muted playsinline loop preload="none" aria-label="Video de una revelación al aire libre con un muro de humo rosado y chisperos">
+          <source src="assets/muro.mp4" type="video/mp4">
         </video>
       </div>
       <div class="texto">
@@ -489,7 +497,7 @@ a{color:var(--rosa-hondo)}
       </div>
     </div>
 
-    <article class="nivel" id="cortina" data-fx="muro" data-nivel="1" data-pkg="Cortina de Color" data-price="649">
+    <article class="nivel" id="cortina" data-fx="muro" data-nivel="1" data-pkg="Cortina de Color" data-price="729" data-precio-attr="efectos.cortina">
       <div class="info">
         <h3 class="nombre">Cortina de Color</h3>
         <p class="relato">Comienza la cuenta regresiva y se encienden los chisperos. En el cero, cuatro puntos de humo disparan a la vez y levantan una cortina de color frente a todos sus invitados.</p>
@@ -500,15 +508,15 @@ a{color:var(--rosa-hondo)}
           <li>Operador y equipo de montaje</li>
         </ul>
         <div class="precio-fila">
-          <p class="precio"><small>S/</small>649</p>
-          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Cortina de Color" data-price="649" target="_blank" rel="noopener">Reservar Cortina</a>
+          <p class="precio"><small>S/</small><span data-precio="efectos.cortina">729</span></p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Cortina de Color" data-price="729" data-precio-attr="efectos.cortina" target="_blank" rel="noopener">Reservar Cortina</a>
           <button class="btn btn-replay" type="button" data-replay="cortina">Ver efecto</button>
         </div>
       </div>
       <div class="tortas" data-lado="4" aria-label="4 puntos de disparo de 16 disparos cada uno"></div>
     </article>
 
-    <article class="nivel" id="intenso" data-fx="muro" data-nivel="2" data-pkg="Muro Intenso" data-price="849">
+    <article class="nivel" id="intenso" data-fx="muro" data-nivel="2" data-pkg="Muro Intenso" data-price="899" data-precio-attr="efectos.intenso">
       <div class="info">
         <h3 class="nombre">Muro Intenso</h3>
         <p class="relato">Más disparos, humo más denso. En el cero, el color cubre el cielo detrás de ustedes y se queda en el aire mientras todos celebran.</p>
@@ -519,15 +527,15 @@ a{color:var(--rosa-hondo)}
           <li>Operador y equipo de montaje</li>
         </ul>
         <div class="precio-fila">
-          <p class="precio"><small>S/</small>849</p>
-          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Muro Intenso" data-price="849" target="_blank" rel="noopener">Reservar Muro Intenso</a>
+          <p class="precio"><small>S/</small><span data-precio="efectos.intenso">899</span></p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Muro Intenso" data-price="899" data-precio-attr="efectos.intenso" target="_blank" rel="noopener">Reservar Muro Intenso</a>
           <button class="btn btn-replay" type="button" data-replay="intenso">Ver efecto</button>
         </div>
       </div>
       <div class="tortas" data-lado="5" aria-label="4 puntos de disparo de 25 disparos cada uno"></div>
     </article>
 
-    <article class="nivel supremo" id="supremo" data-fx="muro" data-nivel="3" data-pkg="Muro Supremo" data-price="999">
+    <article class="nivel supremo" id="supremo" data-fx="muro" data-nivel="3" data-pkg="Muro Supremo" data-price="1199" data-precio-attr="efectos.supremo">
       <div class="info">
         <span class="edicion">Edición especial</span>
         <h3 class="nombre">Muro Supremo</h3>
@@ -539,8 +547,8 @@ a{color:var(--rosa-hondo)}
           <li>Operador y equipo de montaje</li>
         </ul>
         <div class="precio-fila">
-          <p class="precio"><small>S/</small>999</p>
-          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Muro Supremo" data-price="999" target="_blank" rel="noopener">Reservar Muro Supremo</a>
+          <p class="precio"><small>S/</small><span data-precio="efectos.supremo">1,199</span></p>
+          <a class="btn btn-wa wa" href="https://wa.me/51961323186" data-pkg="Muro Supremo" data-price="1199" data-precio-attr="efectos.supremo" target="_blank" rel="noopener">Reservar Muro Supremo</a>
           <button class="btn btn-replay" type="button" data-replay="supremo">Ver efecto</button>
         </div>
       </div>
@@ -570,41 +578,45 @@ a{color:var(--rosa-hondo)}
                 <span class="marca" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
               </div>
               <div class="deco-info">
-                <span class="precio-solo" data-precio-deco="oh-baby">Decoración sola: S/ 599</span>
+                <span class="precio-solo" data-precio-deco="oh-baby">S/ 649</span>
                 <label class="deco-nombre" for="deco-oh-baby">Oh Baby</label>
                 <p class="deco-desc" id="deco-oh-baby-desc">Letras luminosas OH BABY de 1 m de alto rodeadas de globos orgánicos en los colores que elijas, con globos burbuja y osos de peluche.</p>
+                <span class="regalo">🎁 Sus combos incluyen un regalo de bienvenida</span>
                 <ul class="incluye">
                   <li>Letras luminosas OH BABY de 1 m de alto</li>
                   <li>Globos orgánicos en los colores que elijas, con globos burbuja</li>
                   <li>Osos de peluche</li>
                   <li>Estructura anti-viento en exteriores</li>
-                  <li id="oh-baby-tarima-item" hidden>Tarima de 4 × 2 m</li>
+                  <li id="oh-baby-tarima-item" hidden>Tarima de 3 × 2 m</li>
                 </ul>
                 <div class="tarima-opcion">
                   <input type="checkbox" id="tarima-oh-baby" name="tarima" value="si">
-                  <label for="tarima-oh-baby">Agrega tarima (4 × 2 m) por S/ <span data-precio-tarima>279</span></label>
+                  <label for="tarima-oh-baby">Agrega tarima (3 × 2 m) por S/ <span data-precio-tarima>249</span></label>
                 </div>
               </div>
             </div>
           </div>
           <div class="deco">
-            <input class="sr" type="radio" name="deco" id="deco-baby-monumental" value="baby-monumental" aria-describedby="deco-baby-monumental-desc">
+            <input class="sr" type="radio" name="deco" id="deco-lazo-infinito" value="lazo-infinito" aria-describedby="deco-lazo-infinito-desc">
             <div class="deco-card especial">
               <div class="deco-foto">
-                <img src="assets/deco-baby-monumental.jpg" alt="Arco blanco de 3 metros con guirnalda de globos blancos y burbuja, letras gigantes BABY sobre un podio y tarima en un jardín" loading="lazy" width="1050" height="1400">
+                <img src="assets/deco-lazo-infinito.jpg" alt="Panel blanco ondulado e iluminado con un gran lazo y el texto Boy or Girl, entre dos arcos con banners, guirnaldas de globos nude y blancos, imágenes en foam de globo aerostático, caballito y oso, todo sobre tarima en un jardín" loading="lazy" width="1400" height="1050">
                 <span class="marca" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
               </div>
               <div class="deco-info">
-                <span class="precio-solo" data-precio-deco="baby-monumental">Decoración sola: S/ 1,739</span>
+                <span class="precio-solo" data-precio-deco="lazo-infinito">S/ 1,199</span>
                 <span class="edicion">Edición especial</span>
-                <label class="deco-nombre" for="deco-baby-monumental">Baby Monumental</label>
-                <p class="deco-desc" id="deco-baby-monumental-desc">Un arco de 3 m de alto y 5 m de ancho con guirnalda de globos, letras gigantes BABY sobre podio y tarima. Para revelaciones que se ven desde lejos.</p>
+                <label class="deco-nombre" for="deco-lazo-infinito">Lazo Infinito</label>
+                <p class="deco-desc" id="deco-lazo-infinito-desc">Un panel ondulado e iluminado, como un lazo que no termina, rodeado de arcos, globos e imágenes con la temática que elijas. Para una revelación de revista.</p>
+                <span class="regalo">🎁 Sus combos incluyen un regalo de bienvenida</span>
                 <ul class="incluye">
-                  <li>Arco de 3 m de alto por 5 m de ancho</li>
-                  <li>Tarima y podio para las letras</li>
-                  <li>Letras gigantes BABY de 1.7 m de alto</li>
-                  <li>Guirnalda de globos orgánicos con globos burbuja</li>
-                  <li>Oso de peluche</li>
+                  <li>Panel ondulado infinito iluminado con banner personalizado</li>
+                  <li>Arco ranurado</li>
+                  <li>Arco puerta con banner personalizado</li>
+                  <li>Imágenes en foam con la temática que prefieras</li>
+                  <li>Dos guirnaldas de globos</li>
+                  <li>Tarima</li>
+                  <li>Estructura anti-viento</li>
                 </ul>
               </div>
             </div>
@@ -617,7 +629,7 @@ a{color:var(--rosa-hondo)}
                 <span class="marca" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
               </div>
               <div class="deco-info">
-                <span class="precio-solo">Precio según tu idea</span>
+                <span class="precio-solo nota-precio">Precio según tu idea</span>
                 <label class="deco-nombre" for="deco-propia">Tengo mi propia idea</label>
                 <p class="deco-desc" id="deco-propia-desc">¿Viste una decoración que te encantó? Envíanos la foto y te la cotizamos.</p>
               </div>
@@ -635,7 +647,7 @@ a{color:var(--rosa-hondo)}
               <span class="tag salon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Interiores</span>
               <label class="efecto-nombre" for="ef-confeti">Lluvia de Confeti</label>
               <span class="efecto-det">Cañón profesional de confeti</span>
-              <span class="precio-solo" data-precio-efecto="confeti">Efecto solo: S/ 349</span>
+              <span class="precio-solo" data-precio-efecto="confeti">S/ 349</span>
             </div>
           </div>
           <div class="efecto">
@@ -644,7 +656,7 @@ a{color:var(--rosa-hondo)}
               <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
               <label class="efecto-nombre" for="ef-cortina">Cortina de Color</label>
               <span class="efecto-det">Muro de humo de 64 disparos</span>
-              <span class="precio-solo" data-precio-efecto="cortina">Efecto solo: S/ 649</span>
+              <span class="precio-solo" data-precio-efecto="cortina">S/ 729</span>
             </div>
           </div>
           <div class="efecto">
@@ -653,7 +665,7 @@ a{color:var(--rosa-hondo)}
               <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
               <label class="efecto-nombre" for="ef-intenso">Muro Intenso</label>
               <span class="efecto-det">Muro de humo de 100 disparos</span>
-              <span class="precio-solo" data-precio-efecto="intenso">Efecto solo: S/ 849</span>
+              <span class="precio-solo" data-precio-efecto="intenso">S/ 899</span>
             </div>
           </div>
           <div class="efecto">
@@ -662,7 +674,7 @@ a{color:var(--rosa-hondo)}
               <span class="tag aire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-6"/><path d="M12 3l6 9H6z"/><path d="M12 8l7 9H5z"/></svg>Aire libre</span>
               <label class="efecto-nombre" for="ef-supremo">Muro Supremo</label>
               <span class="efecto-det">Muro de humo de 144 disparos</span>
-              <span class="precio-solo" data-precio-efecto="supremo">Efecto solo: S/ 999</span>
+              <span class="precio-solo" data-precio-efecto="supremo">S/ 1,199</span>
             </div>
           </div>
         </div>
@@ -675,12 +687,17 @@ a{color:var(--rosa-hondo)}
           <label class="extra-op">
             <input type="checkbox" name="extra" value="cuadro">
             <img src="assets/extra-cuadro-bienvenida.jpg" alt="" loading="lazy" width="224" height="336">
-            <span class="extra-op-txt"><strong>Cuadro de bienvenida</strong><span class="extra-op-p" data-precio-extra="cuadro">S/ 79</span></span>
+            <span class="extra-op-txt"><strong>Cuadro de bienvenida</strong><span class="extra-op-p">S/ <span data-precio="extras.cuadro">79</span></span><span class="extra-op-regalo" hidden>Incluido de regalo en este combo</span></span>
+          </label>
+          <label class="extra-op">
+            <input type="checkbox" name="extra" value="espejo">
+            <img class="completa" src="assets/espejo-bienvenida.jpg" alt="" loading="lazy" width="937" height="1600">
+            <span class="extra-op-txt"><strong>Espejo de bienvenida</strong><span class="extra-op-p">S/ <span data-precio="extras.espejo">150</span></span><span class="extra-op-regalo" hidden>Incluido de regalo en este combo</span></span>
           </label>
           <label class="extra-op">
             <input type="checkbox" name="extra" value="caja">
             <img src="assets/extra-caja-sorpresa.jpg" alt="" loading="lazy" width="224" height="326">
-            <span class="extra-op-txt"><strong>Caja sorpresa</strong><span class="extra-op-p" data-precio-extra="caja">S/ 149</span></span>
+            <span class="extra-op-txt"><strong>Caja sorpresa</strong><span class="extra-op-p">S/ <span data-precio="extras.caja">149</span></span><span class="extra-op-regalo" hidden>Incluido de regalo en este combo</span></span>
           </label>
         </div>
       </fieldset>
@@ -692,15 +709,11 @@ a{color:var(--rosa-hondo)}
             <p class="res-eti">Tu combo</p>
             <h3 class="res-nombre" id="combo-nombre">Oh Baby + Muro Intenso</h3>
             <p class="res-extras" id="combo-extras" hidden></p>
-            <p class="precio" id="combo-precio-fila"><small>S/</small><span id="combo-precio">1,289</span></p>
+            <p class="regalo" id="combo-regalo">🎁 De regalo, a elegir: Cuadro de bienvenida o Espejo de bienvenida</p>
+            <p class="precio" id="combo-precio-fila"><small>S/</small><span id="combo-precio">1,548</span></p>
             <p class="a-cotizar" id="combo-cotizar" hidden>Decoración a cotizar</p>
             <p class="desde" id="combo-desde" hidden></p>
-            <div class="ahorro-bloque" id="combo-ahorro-bloque">
-              <p class="por-separado" id="combo-separado-fila"><s>Por separado: S/ <span id="combo-separado">1,448</span></s></p>
-              <p class="desglose" id="combo-desglose">Decoración S/ 599 + efecto S/ 849</p>
-              <p class="ahorro" id="combo-ahorro">Ahorras S/ 159</p>
-              <p class="ahorro-nota" id="combo-ahorro-nota">Mientras más grande tu revelación, más ahorras.</p>
-            </div>
+            <p class="desglose" id="combo-desglose">Decoración S/ 649 + efecto S/ 899</p>
           </div>
           <span class="sello-mov" id="combo-movilidad"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>Movilidad incluida en Trujillo</span>
           <a class="btn btn-wa" id="combo-wa" href="https://wa.me/51961323186" target="_blank" rel="noopener">
@@ -711,8 +724,22 @@ a{color:var(--rosa-hondo)}
         <div class="movilidad">
           <h3>¿Tu revelación es fuera de Trujillo?</h3>
           <ul>
-            <li><span>Zona intermedia<small>Huanchaco, Moche, Laredo, Salaverry</small></span><b>+S/ 79</b></li>
-            <li><span>Jornada completa<small>Simbal y lugares a ~1 hora</small></span><b>+S/ 379</b></li>
+            <li class="mov-zona">
+              <span>Zona intermedia<small>Huanchaco, Moche, Laredo, Salaverry, Esperanza, Florencia de Mora, El Porvenir, etc.</small></span>
+              <div class="chips">
+                <div class="chip" data-col="efecto"><span>Solo efecto</span><b>+S/ <span data-precio="movilidad.intermedia.efecto">30</span></b></div>
+                <div class="chip" data-col="oh-baby"><span>Oh Baby</span><b>+S/ <span data-precio="movilidad.intermedia.oh-baby">99</span></b></div>
+                <div class="chip" data-col="lazo-infinito"><span>Lazo Infinito</span><b>+S/ <span data-precio="movilidad.intermedia.lazo-infinito">149</span></b></div>
+              </div>
+            </li>
+            <li class="mov-zona">
+              <span>Jornada completa<small>Simbal y lugares a ~1 hora</small></span>
+              <div class="chips">
+                <div class="chip" data-col="efecto"><span>Solo efecto</span><b>+S/ <span data-precio="movilidad.jornada.efecto">99</span></b></div>
+                <div class="chip" data-col="oh-baby"><span>Oh Baby</span><b>+S/ <span data-precio="movilidad.jornada.oh-baby">299</span></b></div>
+                <div class="chip" data-col="lazo-infinito"><span>Lazo Infinito</span><b>+S/ <span data-precio="movilidad.jornada.lazo-infinito">499</span></b></div>
+              </div>
+            </li>
             <li><span>Más lejos<small>Te cotizamos según el lugar</small></span><a class="wa" href="https://wa.me/51961323186" data-pkg="" target="_blank" rel="noopener">Cotizar por WhatsApp</a></li>
           </ul>
         </div>
@@ -730,18 +757,18 @@ a{color:var(--rosa-hondo)}
     <div class="extras-lista">
       <div class="extra">
         <div><strong>Par de humos de color</strong><small>Solo aire libre</small></div>
-        <span class="p">S/ 49</span>
+        <span class="p">S/ <span data-precio="extras.humos">49</span></span>
       </div>
       <div class="extra">
         <div><strong>Marco de chispas frías</strong><small>2 chispas para la entrada o la mesa</small></div>
-        <span class="p">S/ 69</span>
+        <span class="p">S/ <span data-precio="extras.marco">69</span></span>
       </div>
       <div class="extra">
         <div><strong>Torta de humo extra</strong><small>Más color en el cielo, aire libre</small></div>
         <div class="chips">
-          <div class="chip"><span>16 disparos</span><b>S/ 99</b></div>
-          <div class="chip"><span>25 disparos</span><b>S/ 149</b></div>
-          <div class="chip"><span>36 disparos</span><b>S/ 199</b></div>
+          <div class="chip"><span>16 disparos</span><b>S/ <span data-precio="extras.torta16">139</span></b></div>
+          <div class="chip"><span>25 disparos</span><b>S/ <span data-precio="extras.torta25">189</span></b></div>
+          <div class="chip"><span>36 disparos</span><b>S/ <span data-precio="extras.torta36">259</span></b></div>
         </div>
       </div>
       <div class="extra con-foto">
@@ -750,7 +777,15 @@ a{color:var(--rosa-hondo)}
           <span class="lupa" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/><path d="M10.5 7.5v6M7.5 10.5h6"/></svg></span>
         </button>
         <div><strong>Cuadro de bienvenida</strong><small>Cuadro en foam con tu mensaje, caballete y globos.</small></div>
-        <span class="p" data-precio-extra="cuadro">S/ 79</span>
+        <span class="p">S/ <span data-precio="extras.cuadro">79</span></span>
+      </div>
+      <div class="extra con-foto">
+        <button class="ver-foto" type="button" data-ampliar="Espejo de bienvenida" aria-label="Ver foto ampliada del espejo de bienvenida">
+          <img class="completa" src="assets/espejo-bienvenida.jpg" alt="Espejo en arco con marco dorado y el mensaje Boy or Girl con nombres y fecha, sobre cubos con la palabra BABY en un jardín" loading="lazy" width="937" height="1600">
+          <span class="lupa" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/><path d="M10.5 7.5v6M7.5 10.5h6"/></svg></span>
+        </button>
+        <div><strong>Espejo de bienvenida</strong><small>Espejo en arco con su mensaje personalizado (nombres y fecha) y decorado.</small></div>
+        <span class="p">S/ <span data-precio="extras.espejo">150</span></span>
       </div>
       <div class="extra con-foto">
         <button class="ver-foto" type="button" data-ampliar="Caja sorpresa" aria-label="Ver foto ampliada de la caja sorpresa">
@@ -758,7 +793,7 @@ a{color:var(--rosa-hondo)}
           <span class="lupa" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/><path d="M10.5 7.5v6M7.5 10.5h6"/></svg></span>
         </button>
         <div><strong>Caja sorpresa</strong><small>Caja decorada de 60 × 60 × 70 cm con 10 globos de helio y la palabra Girl o Boy. Al abrirla, salen los globos del color del bebé.</small></div>
-        <span class="p" data-precio-extra="caja">S/ 149</span>
+        <span class="p">S/ <span data-precio="extras.caja">149</span></span>
       </div>
     </div>
     <p class="nota">Disponibles solo como complemento de un paquete.</p>

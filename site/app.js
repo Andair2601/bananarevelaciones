@@ -28,13 +28,67 @@
   }
   initPixel();
 
+  // ===== Precios: única fuente de la página =====
+  // Cambia aquí cualquier precio: paquetes, combos, adicionales, movilidad, botones de WhatsApp,
+  // textos "Desde" y Pixel lo leen de este objeto. El HTML solo guarda el mismo valor como respaldo.
+  // Los combos valen decoración (+ tarima) + efecto + extras, sin descuento.
+  var PRECIOS = {
+    efectos: {
+      humo: { nombre: 'Humo de Color', precio: 199 },
+      confeti: { nombre: 'Lluvia de Confeti', precio: 349, fx: 'confeti' },
+      cortina: { nombre: 'Cortina de Color', precio: 729, fx: 'muro', nivel: 1 },
+      intenso: { nombre: 'Muro Intenso', precio: 899, fx: 'muro', nivel: 2 },
+      supremo: { nombre: 'Muro Supremo', precio: 1199, fx: 'muro', nivel: 3 }
+    },
+    decoraciones: {
+      'oh-baby': { nombre: 'Oh Baby', precio: 649 },
+      'lazo-infinito': { nombre: 'Lazo Infinito', precio: 1199 }
+    },
+    tarima: { nombre: 'Tarima de 3 × 2 m', precio: 249, deco: 'oh-baby' },
+    extras: {
+      humos: { nombre: 'Par de humos de color', precio: 49 },
+      marco: { nombre: 'Marco de chispas frías', precio: 69 },
+      torta16: { nombre: 'Torta de humo extra de 16 disparos', precio: 139 },
+      torta25: { nombre: 'Torta de humo extra de 25 disparos', precio: 189 },
+      torta36: { nombre: 'Torta de humo extra de 36 disparos', precio: 259 },
+      cuadro: { nombre: 'Cuadro de bienvenida', precio: 79 },
+      espejo: { nombre: 'Espejo de bienvenida', precio: 150 },
+      caja: { nombre: 'Caja sorpresa', precio: 149 }
+    },
+    // Movilidad fuera de Trujillo: depende de si es solo efecto o lleva decoración
+    movilidad: {
+      intermedia: { nombre: 'Zona intermedia', efecto: 30, 'oh-baby': 99, 'lazo-infinito': 149 },
+      jornada: { nombre: 'Jornada completa', efecto: 99, 'oh-baby': 299, 'lazo-infinito': 499 }
+    }
+  };
+  // Efectos y extras que se combinan en "Arma tu revelación"
+  var EFECTOS_COMBO = ['confeti', 'cortina', 'intenso', 'supremo'];
+  var EXTRAS_COMBO = ['cuadro', 'espejo', 'caja'];
+
+  var soles = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+  var precioDe = function (ruta) {
+    var v = ruta.split('.').reduce(function (o, k) { return o[k]; }, PRECIOS);
+    return typeof v === 'number' ? v : v.precio;
+  };
+  var minimo = function (lista) { return Math.min.apply(null, lista); };
+  var DESDE = {
+    efecto: minimo(Object.keys(PRECIOS.efectos).map(function (id) { return PRECIOS.efectos[id].precio; })),
+    combo: minimo(Object.keys(PRECIOS.decoraciones).map(function (d) {
+      return PRECIOS.decoraciones[d].precio + minimo(EFECTOS_COMBO.map(function (e) { return PRECIOS.efectos[e].precio; }));
+    }))
+  };
+  // Precios visibles (data-precio), atributo data-price para WhatsApp y Pixel (data-precio-attr) y "Desde"
+  document.querySelectorAll('[data-precio]').forEach(function (n) { n.textContent = soles(precioDe(n.getAttribute('data-precio'))); });
+  document.querySelectorAll('[data-precio-attr]').forEach(function (n) { n.setAttribute('data-price', precioDe(n.getAttribute('data-precio-attr'))); });
+  document.querySelectorAll('[data-desde]').forEach(function (n) { n.textContent = soles(DESDE[n.getAttribute('data-desde')]); });
+
   // ===== WhatsApp con mensaje por paquete =====
   var base = 'https://wa.me/' + CONFIG.whatsapp + '?text=';
   document.querySelectorAll('a.wa').forEach(function (a) {
     var pkg = a.getAttribute('data-pkg');
     var precio = a.getAttribute('data-price');
     var msg = pkg
-      ? 'Hola Banana Deco Party, me interesa el paquete ' + pkg + ' (S/ ' + precio + ') para mi revelación de género. ¿Tienen disponible mi fecha?'
+      ? 'Hola Banana Deco Party, me interesa el paquete ' + pkg + ' (S/ ' + soles(Number(precio)) + ') para mi revelación de género. ¿Tienen disponible mi fecha?'
       : 'Hola Banana Deco Party, quiero información sobre las revelaciones de género.';
     a.href = base + encodeURIComponent(msg);
     a.addEventListener('click', function () {
@@ -421,53 +475,34 @@
   }
 
   // ===== Combos: decoración + efecto =====
-  // Única fuente de precios de la sección (soles; los combos incluyen movilidad en Trujillo).
-  // El ahorro se calcula: (decoración sola + efecto solo) - combo.
+  // Precio = decoración (+ tarima) + efecto + extras, todo desde PRECIOS; sin descuentos.
+  // Los combos de Oh Baby traen un regalo; es un beneficio, no cambia el precio.
   // "propia": decoración del cliente, se cotiza aparte; solo se muestra el precio del efecto solo.
-  // La tarima (solo Oh Baby) suma lo mismo al combo y a la decoración sola: el ahorro no cambia.
-  // Los extras tampoco llevan descuento: suman igual al combo y al precio por separado.
+  var REGALOS = {
+    cuadro: { etiqueta: '🎁 De regalo: Cuadro de bienvenida', wa: 'cuadro de bienvenida', extras: ['cuadro'] },
+    espejo: { etiqueta: '🎁 De regalo: Espejo de bienvenida', wa: 'espejo de bienvenida', extras: ['espejo'] },
+    cuadroOEspejo: {
+      etiqueta: '🎁 De regalo, a elegir: Cuadro de bienvenida o Espejo de bienvenida',
+      wa: 'cuadro o espejo de bienvenida', extras: ['cuadro', 'espejo']
+    }
+  };
   var COMBOS = {
-    tarima: { precio: 279, deco: 'oh-baby' },
-    extras: {
-      cuadro: { nombre: 'Cuadro de bienvenida', precio: 79 },
-      caja: { nombre: 'Caja sorpresa', precio: 149 }
-    },
-    decoraciones: {
-      'oh-baby': { nombre: 'Oh Baby', precio: 599 },
-      'baby-monumental': { nombre: 'Baby Monumental', precio: 1739 }
-    },
-    efectos: {
-      confeti: { nombre: 'Lluvia de Confeti', fx: 'confeti', precio: 349 },
-      cortina: { nombre: 'Cortina de Color', fx: 'muro', nivel: 1, precio: 649 },
-      intenso: { nombre: 'Muro Intenso', fx: 'muro', nivel: 2, precio: 849 },
-      supremo: { nombre: 'Muro Supremo', fx: 'muro', nivel: 3, precio: 999 }
-    },
-    combos: {
-      'oh-baby': { confeti: 889, cortina: 1139, intenso: 1289, supremo: 1389 },
-      'baby-monumental': { confeti: 1929, cortina: 2179, intenso: 2329, supremo: 2429 }
+    regalos: {
+      'oh-baby': { confeti: 'cuadro', cortina: 'cuadro', intenso: 'cuadroOEspejo', supremo: 'cuadroOEspejo' },
+      'lazo-infinito': { confeti: 'cuadro', cortina: 'espejo', intenso: 'espejo', supremo: 'espejo' }
     },
     recomendado: { decoracion: 'oh-baby', efecto: 'intenso' }
   };
-
-  var soles = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
-  // Precio de los extras en complementos y en el paso 3
-  document.querySelectorAll('[data-precio-extra]').forEach(function (n) {
-    n.textContent = 'S/ ' + soles(COMBOS.extras[n.getAttribute('data-precio-extra')].precio);
-  });
 
   var armador = document.getElementById('armador');
   if (armador) {
     var ui = {
       nombre: document.getElementById('combo-nombre'),
       extras: document.getElementById('combo-extras'),
+      regalo: document.getElementById('combo-regalo'),
       precio: document.getElementById('combo-precio'),
       precioFila: document.getElementById('combo-precio-fila'),
-      bloqueAhorro: document.getElementById('combo-ahorro-bloque'),
-      separadoFila: document.getElementById('combo-separado-fila'),
-      separado: document.getElementById('combo-separado'),
       desglose: document.getElementById('combo-desglose'),
-      ahorro: document.getElementById('combo-ahorro'),
-      ahorroNota: document.getElementById('combo-ahorro-nota'),
       badge: document.getElementById('combo-badge'),
       cotizar: document.getElementById('combo-cotizar'),
       desde: document.getElementById('combo-desde'),
@@ -477,51 +512,87 @@
       tarima: document.getElementById('tarima-oh-baby'),
       tarimaItem: document.getElementById('oh-baby-tarima-item'),
       fotoTarima: document.getElementById('foto-oh-baby-tarima'),
-      decoTarima: document.getElementById('deco-' + COMBOS.tarima.deco)
+      decoTarima: document.getElementById('deco-' + PRECIOS.tarima.deco)
     };
     var elegido = function (nombre) { var r = armador.querySelector('input[name="' + nombre + '"]:checked'); return r ? r.value : null; };
+    var casillaExtra = function (id) { return armador.querySelector('input[name="extra"][value="' + id + '"]'); };
+    var regaloDe = function (d, e) { var r = COMBOS.regalos[d] && COMBOS.regalos[d][e]; return r ? REGALOS[r] : null; };
 
     // Precio de la decoración sola; con tarima solo en la decoración que la ofrece
     var precioDecoSola = function (d) {
-      return COMBOS.decoraciones[d].precio + (d === COMBOS.tarima.deco && ui.tarima.checked ? COMBOS.tarima.precio : 0);
+      return PRECIOS.decoraciones[d].precio + (d === PRECIOS.tarima.deco && ui.tarima.checked ? PRECIOS.tarima.precio : 0);
     };
 
     // Etiquetas de precio por separado (paso 1 y paso 2)
     var etiquetas = function () {
       armador.querySelectorAll('[data-precio-deco]').forEach(function (n) {
-        n.textContent = 'Decoración sola: S/ ' + soles(precioDecoSola(n.getAttribute('data-precio-deco')));
+        n.textContent = 'S/ ' + soles(precioDecoSola(n.getAttribute('data-precio-deco')));
       });
     };
     armador.querySelectorAll('[data-precio-efecto]').forEach(function (n) {
-      n.textContent = 'Efecto solo: S/ ' + soles(COMBOS.efectos[n.getAttribute('data-precio-efecto')].precio);
+      n.textContent = 'S/ ' + soles(PRECIOS.efectos[n.getAttribute('data-precio-efecto')].precio);
     });
-    armador.querySelectorAll('[data-precio-tarima]').forEach(function (n) { n.textContent = soles(COMBOS.tarima.precio); });
+    armador.querySelectorAll('[data-precio-tarima]').forEach(function (n) { n.textContent = soles(PRECIOS.tarima.precio); });
 
-    // Extras marcados, en el orden de COMBOS.extras
+    // Extras marcados (ids), en el orden de EXTRAS_COMBO
     var extrasMarcados = function () {
-      return Object.keys(COMBOS.extras).filter(function (id) {
-        return armador.querySelector('input[name="extra"][value="' + id + '"]').checked;
-      }).map(function (id) { return COMBOS.extras[id]; });
+      return EXTRAS_COMBO.filter(function (id) { return casillaExtra(id).checked; });
     };
     var minus = function (x) { return x.nombre.toLowerCase(); };
     var listaY = function (arr) { return arr.length > 1 ? arr.slice(0, -1).join(', ') + ' y ' + arr[arr.length - 1] : arr.join(''); };
 
+    // Regalo de un solo extra (cuadro): no se puede comprar aparte, queda incluido
+    var bloquearRegaloFijo = function (regalo) {
+      EXTRAS_COMBO.forEach(function (id) {
+        var casilla = casillaExtra(id), fijo = !!regalo && regalo.extras.length === 1 && regalo.extras[0] === id;
+        if (fijo) casilla.checked = false;
+        casilla.disabled = fijo;
+      });
+    };
+    // Aviso en cada casilla: incluido, de regalo, puede ser el regalo o nada (se cobra)
+    var avisosRegalo = function (c) {
+      EXTRAS_COMBO.forEach(function (id) {
+        var aviso = casillaExtra(id).parentNode.querySelector('.extra-op-regalo'), texto = '';
+        if (c.regalo && c.regalo.extras.indexOf(id) >= 0) {
+          if (c.regalo.extras.length === 1) texto = 'Incluido de regalo en este combo';
+          else if (c.regaloId === id) texto = 'De regalo en este combo';
+          else if (!c.regaloId) texto = 'Puedes elegirlo de regalo';
+        }
+        aviso.textContent = texto;
+        aviso.hidden = !texto;
+      });
+    };
+
+    // Regalo a elegir (cuadro o espejo): de los marcados entre esas opciones, el más caro es el regalo
+    // y el resto se cobra. Los demás extras siempre se cobran.
+    var regaloElegido = function (regalo, ids) {
+      if (!regalo) return null;
+      if (regalo.extras.length === 1) return regalo.extras[0];
+      return ids.filter(function (id) { return regalo.extras.indexOf(id) >= 0; }).reduce(function (mejor, id) {
+        return !mejor || PRECIOS.extras[id].precio > PRECIOS.extras[mejor].precio ? id : mejor;
+      }, null);
+    };
+
     var combo = function () {
-      var d = elegido('deco'), e = elegido('efecto'), ef = COMBOS.efectos[e];
-      var ex = extrasMarcados(), sumaExtras = ex.reduce(function (s, x) { return s + x.precio; }, 0);
+      var d = elegido('deco'), e = elegido('efecto'), ef = PRECIOS.efectos[e], ids = extrasMarcados();
+      var regalo = d === 'propia' ? null : regaloDe(d, e), regaloId = regaloElegido(regalo, ids);
+      var ex = ids.filter(function (id) { return id !== regaloId; }).map(function (id) { return PRECIOS.extras[id]; });
+      var sumaExtras = ex.reduce(function (s, x) { return s + x.precio; }, 0);
       var conExtras = ex.length ? ' con ' + listaY(ex.map(minus)) : '';
       if (d === 'propia') {
         return { deco: d, efecto: e, propia: true, extras: ex, nombre: 'Tu idea + ' + ef.nombre,
           pixel: 'Decoración propia + ' + ef.nombre + conExtras };
       }
-      var deco = COMBOS.decoraciones[d];
-      var conTarima = d === COMBOS.tarima.deco && ui.tarima.checked, extra = conTarima ? COMBOS.tarima.precio : 0;
+      var deco = PRECIOS.decoraciones[d];
+      var conTarima = d === PRECIOS.tarima.deco && ui.tarima.checked, extraTarima = conTarima ? PRECIOS.tarima.precio : 0;
       var nombre = deco.nombre + (conTarima ? ' con tarima' : '') + ' + ' + ef.nombre;
-      var precio = COMBOS.combos[d][e] + extra + sumaExtras, precioDeco = deco.precio + extra;
-      var porSeparado = precioDeco + ef.precio + sumaExtras;
-      return { deco: d, efecto: e, nombre: nombre, pixel: nombre + conExtras, precio: precio, conTarima: conTarima, extras: ex,
-        precioDecoBase: deco.precio, precioDeco: precioDeco, precioEfecto: ef.precio,
-        porSeparado: porSeparado, ahorro: porSeparado - precio };
+      var regaloX = regaloId ? PRECIOS.extras[regaloId] : null;
+      return { deco: d, efecto: e, nombre: nombre, pixel: nombre + conExtras, extras: ex, conTarima: conTarima,
+        regalo: regalo, regaloId: regaloId, regaloX: regaloX,
+        etiquetaRegalo: regalo && (regaloX ? '🎁 De regalo: ' + regaloX.nombre : regalo.etiqueta),
+        waRegalo: regalo && (regaloX ? minus(regaloX) : regalo.wa),
+        precioDeco: deco.precio, precioEfecto: ef.precio,
+        precio: deco.precio + extraTarima + ef.precio + sumaExtras };
     };
     // Datos del Pixel: la decoración propia no tiene precio todavía
     var datosPixel = function (c) {
@@ -529,7 +600,12 @@
     };
 
     var actualizar = function () {
-      var c = combo(), ef = COMBOS.efectos[c.efecto], msg;
+      bloquearRegaloFijo(elegido('deco') === 'propia' ? null : regaloDe(elegido('deco'), elegido('efecto')));
+      var c = combo(), ef = PRECIOS.efectos[c.efecto], msg;
+      avisosRegalo(c);
+      armador.querySelectorAll('.movilidad [data-col]').forEach(function (n) {
+        n.classList.toggle('activa', n.getAttribute('data-col') === c.deco);
+      });
       // Tarjeta Oh Baby: foto, lista y precio reflejan la casilla aunque esté elegida otra decoración
       var tarima = ui.tarima.checked;
       ui.decoTarima.nextElementSibling.classList.toggle('con-tarima', tarima);
@@ -542,7 +618,9 @@
       ui.extras.textContent = 'Incluye: ' + c.extras.map(function (x) {
         return minus(x) + (c.propia ? ' S/ ' + soles(x.precio) : '');
       }).join(', ');
-      ui.precioFila.hidden = ui.bloqueAhorro.hidden = ui.movilidad.hidden = !!c.propia;
+      ui.regalo.hidden = !c.regalo;
+      if (c.regalo) ui.regalo.textContent = c.etiquetaRegalo;
+      ui.precioFila.hidden = ui.desglose.hidden = ui.movilidad.hidden = !!c.propia;
       ui.cotizar.hidden = ui.desde.hidden = !c.propia;
       ui.badge.hidden = c.propia || !(c.deco === COMBOS.recomendado.decoracion && c.efecto === COMBOS.recomendado.efecto);
       if (c.propia) {
@@ -553,16 +631,13 @@
           '. Les envío la foto. Mi fecha es: ___ y el lugar: ___';
       } else {
         ui.precio.textContent = soles(c.precio);
-        ui.desglose.textContent = 'Decoración S/ ' + soles(c.precioDecoBase) +
-          (c.conTarima ? ' + tarima S/ ' + soles(COMBOS.tarima.precio) : '') + ' + efecto S/ ' + soles(c.precioEfecto) +
-          c.extras.map(function (x) { return ' + ' + minus(x) + ' S/ ' + soles(x.precio); }).join('');
-        // Sin ahorro real no se muestra el precio tachado ni el ahorro
-        ui.separadoFila.hidden = ui.ahorro.hidden = ui.ahorroNota.hidden = c.ahorro <= 0;
-        ui.separado.textContent = soles(c.porSeparado);
-        ui.ahorro.textContent = 'Ahorras S/ ' + soles(c.ahorro);
+        ui.desglose.textContent = 'Decoración S/ ' + soles(c.precioDeco) +
+          (c.conTarima ? ' + tarima S/ ' + soles(PRECIOS.tarima.precio) : '') + ' + efecto S/ ' + soles(c.precioEfecto) +
+          c.extras.map(function (x) { return ' + ' + minus(x) + ' S/ ' + soles(x.precio); }).join('') +
+          (c.regaloX ? ' + ' + minus(c.regaloX) + ' de regalo' : '');
         ui.waTexto.textContent = 'Reservar por WhatsApp';
-        msg = 'Hola Banana Deco Party, me interesa el combo ' + c.pixel +
-          ' (S/ ' + soles(c.precio) + ') para mi revelación de género. ¿Tienen disponible mi fecha?';
+        msg = 'Hola Banana Deco Party, me interesa el combo ' + c.pixel + ' (S/ ' + soles(c.precio) + ')' +
+          (c.regalo ? ', con regalo: ' + c.waRegalo + ',' : '') + ' para mi revelación de género. ¿Tienen disponible mi fecha?';
       }
       ui.wa.href = base + encodeURIComponent(msg);
       return c;
@@ -575,7 +650,7 @@
       var c = actualizar();
       track('CustomizeProduct', datosPixel(c));
       if (ev.target.name === 'efecto' && !reduce) {
-        var fx = COMBOS.efectos[c.efecto];
+        var fx = PRECIOS.efectos[c.efecto];
         efecto(fx.fx, fx.nivel);
       }
     });
