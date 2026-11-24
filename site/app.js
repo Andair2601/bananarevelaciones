@@ -599,12 +599,18 @@
       return c.propia ? { content_name: c.pixel } : { content_name: c.pixel, value: c.precio, currency: 'PEN' };
     };
 
+    // Con el script activo la movilidad muestra solo una ficha por zona; sin él se ven todas
+    armador.querySelector('.movilidad').classList.add('filtrada');
+
     var actualizar = function () {
       bloquearRegaloFijo(elegido('deco') === 'propia' ? null : regaloDe(elegido('deco'), elegido('efecto')));
       var c = combo(), ef = PRECIOS.efectos[c.efecto], msg;
       avisosRegalo(c);
+      // Movilidad fuera de Trujillo: solo el precio que corresponde a la decoración elegida.
+      // Con decoración propia (se cotiza aparte) se muestra el de solo efecto.
+      var colMovilidad = c.propia ? 'efecto' : c.deco;
       armador.querySelectorAll('.movilidad [data-col]').forEach(function (n) {
-        n.classList.toggle('activa', n.getAttribute('data-col') === c.deco);
+        n.classList.toggle('activa', n.getAttribute('data-col') === colMovilidad);
       });
       // Tarjeta Oh Baby: foto, lista y precio reflejan la casilla aunque esté elegida otra decoración
       var tarima = ui.tarima.checked;
